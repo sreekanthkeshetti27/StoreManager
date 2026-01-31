@@ -1,0 +1,5 @@
+MOngoDb Atlas:
+nikhil 
+nikhil123
+
+MONGO_URI=mongodb+srv://nikhil:nikhil123@cluster0.nxbrjky.mongodb.net/store_manager?retryWrites=true&w=majority
