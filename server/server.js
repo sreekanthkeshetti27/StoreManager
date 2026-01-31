@@ -12,7 +12,11 @@ const allowedOrigins = [
 ];
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "*", // For now, use "*" to test if it works. Later you can restrict it to your Vercel URL.
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true
+}));
 // app.use(express.json()); // Allows the server to understand JSON data sent from React
 // Increase the limit to 50mb (or more if needed)
 app.use(express.json({ limit: '50mb' }));
