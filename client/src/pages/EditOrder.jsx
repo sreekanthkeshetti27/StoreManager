@@ -3,6 +3,7 @@ import { Card, Form, Button, Row, Col, Table, Spinner } from 'react-bootstrap';
 import { Plus, Trash2, Save, ArrowLeft, Calculator } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from '../api';
 
 const EditOrder = () => {
   const { id } = useParams();
@@ -107,7 +108,7 @@ const EditOrder = () => {
     };
 
     try {
-      await axios.put(`http://localhost:5000/api/orders/${id}`, updatedOrder);
+      await axios.put(`/api/orders/${id}`, updatedOrder);
       alert("✅ Order Updated!");
       navigate('/order-logs');
     } catch (err) {

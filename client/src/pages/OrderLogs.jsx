@@ -160,6 +160,7 @@ import * as XLSX from 'xlsx';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 import { Upload } from 'lucide-react'; // Import Upload icon
+import api from '../api';
 
 const OrderLogs = () => {
     const fileInputRef = useRef(null); // To trigger the hidden file input 
@@ -552,7 +553,8 @@ const handleImport = (e) => {
       }
 
       // Send to Backend
-      await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
+      // await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
+            await axios.post('/api/orders/bulk', ordersToUpload);
       alert(`🎉 Success! ${ordersToUpload.length} orders imported with calculated profits.`);
       fetchOrders(); // Refresh the list
       

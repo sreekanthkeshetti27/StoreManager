@@ -6,6 +6,10 @@ const Order = require('./models/Order'); // Import the model
 
 dotenv.config();
 const app = express();
+const allowedOrigins = [
+  process.env.FRONTEND_URL, // Your Vercel URL
+  'http://localhost:5173'   // Keep local for testing
+];
 
 // Middleware
 app.use(cors());
@@ -138,6 +142,6 @@ app.post('/api/orders/bulk', async (req, res) => {
 });
 // Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT,'0.0.0.0', () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Form, Button, Row, Col, Table } from 'react-bootstrap';
 import { Plus, Trash2, Save, PackagePlus } from 'lucide-react';
 import axios from 'axios';
+import api from '../api';
 
 const Dashboard = () => {
   const [orderHeader, setOrderHeader] = useState({
@@ -66,7 +67,8 @@ const Dashboard = () => {
     };
 
     try {
-      await axios.post('http://localhost:5000/api/orders', finalOrder);
+      // await axios.post('http://localhost:5000/api/orders', finalOrder);
+      await api.post('/api/orders', finalOrder);
       alert("✅ Order Saved Successfully!");
       window.location.reload();
     } catch (err) {
