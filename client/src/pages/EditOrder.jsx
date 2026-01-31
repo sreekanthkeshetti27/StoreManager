@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Form, Button, Row, Col, Table, Spinner } from 'react-bootstrap';
 import { Plus, Trash2, Save, ArrowLeft, Calculator } from 'lucide-react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+// import axios from 'axios';
 import api from '../api';
 
 const EditOrder = () => {
@@ -36,7 +36,9 @@ const EditOrder = () => {
   useEffect(() => {
     const fetchOrderDetails = async () => {
       try {
-        const res = await axios.get('http://localhost:5000/api/orders');
+                const res = await axios.get('/api/orders');
+
+        // const res = await axios.get('http://localhost:5000/api/orders');
         const currentOrder = res.data.find(o => o._id === id);
         
         if (currentOrder) {

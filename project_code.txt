@@ -1,0 +1,3155 @@
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\eslint.config.js
+========================================
+
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\index.html
+========================================
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>client</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\package.json
+========================================
+
+{
+  "name": "client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.4",
+    "bootstrap": "^5.3.8",
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.13.0",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  }
+}
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\api.js
+========================================
+
+// client/src/api.js
+import axios from 'axios';
+
+// This looks at your Vercel/Local settings. 
+// If VITE_API_URL exists, it uses it. Otherwise, it uses localhost.
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const api = axios.create({
+    baseURL: API_BASE_URL
+});
+
+export default api;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\App.css
+========================================
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\App.jsx
+========================================
+
+// import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+// import viteLogo from '/vite.svg'
+// import './App.css'
+
+// function App() {
+//   const [count, setCount] = useState(0)
+
+//   return (
+//     <>
+//       <div>
+//         <a href="https://vite.dev" target="_blank">
+//           <img src={viteLogo} className="logo" alt="Vite logo" />
+//         </a>
+//         <a href="https://react.dev" target="_blank">
+//           <img src={reactLogo} className="logo react" alt="React logo" />
+//         </a>
+//       </div>
+//       <h1>Vite + React</h1>
+//       <div className="card">
+//         <button onClick={() => setCount((count) => count + 1)}>
+//           count is {count}
+//         </button>
+//         <p>
+//           Edit <code>src/App.jsx</code> and save to test HMR
+//         </p>
+//       </div>
+//       <p className="read-the-docs">
+//         Click on the Vite and React logos to learn more
+//       </p>
+//     </>
+//   )
+// }
+
+// export default App
+// client/src/App.jsx
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
+import OrderLogs from './pages/OrderLogs';
+import PaymentLogs from './pages/PaymentLogs';
+import EditOrder from './pages/EditOrder';
+
+function App() {
+  return (
+    <Router>
+      <div className="d-flex">
+        {/* Fixed Sidebar */}
+        <Sidebar />
+
+        {/* Dynamic Content Area */}
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/order-logs" element={<OrderLogs />} />
+            <Route path="/payment-logs" element={<PaymentLogs />} />
+            <Route path="/edit-order/:id" element={<EditOrder />} />
+          </Routes>
+        </div>
+      </div>
+    </Router>
+  );
+}
+
+export default App;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\components\Sidebar.jsx
+========================================
+
+// client/src/components/Sidebar.jsx
+import React from 'react';
+import { NavLink } from 'react-router-dom';
+import { LayoutDashboard, ClipboardList, WalletCards } from 'lucide-react';
+
+const Sidebar = () => {
+  return (
+    <div className="sidebar p-3 d-flex flex-column">
+      <h4 className="text-center mb-4 text-primary">Store Manager</h4>
+      <hr />
+      <ul className="nav nav-pills flex-column mb-auto">
+        <li className="nav-item">
+          <NavLink to="/" className="nav-link d-flex align-items-center gap-2">
+            <LayoutDashboard size={20} />
+            Dashboard
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/order-logs" className="nav-link d-flex align-items-center gap-2">
+            <ClipboardList size={20} />
+            Order Logs
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/payment-logs" className="nav-link d-flex align-items-center gap-2">
+            <WalletCards size={20} />
+            Payment Logs
+          </NavLink>
+        </li>
+      </ul>
+      <hr />
+      <div className="text-muted small text-center">v1.0.0</div>
+    </div>
+  );
+};
+
+export default Sidebar;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\index.css
+========================================
+
+/* :root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+} */
+body {
+  background-color: #f8f9fa;
+}
+
+.sidebar {
+  min-height: 100vh;
+  width: 250px;
+  background-color: #212529;
+  color: white;
+  position: fixed;
+}
+
+.main-content {
+  margin-left: 250px;
+  padding: 20px;
+  width: calc(100% - 250px);
+}
+
+.nav-link {
+  color: rgba(255,255,255,.75);
+  margin-bottom: 10px;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: white;
+  background-color: #0d6efd;
+  border-radius: 5px;
+}
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\main.jsx
+========================================
+
+// import { StrictMode } from 'react'
+// import { createRoot } from 'react-dom/client'
+// import './index.css'
+// import App from './App.jsx'
+
+// createRoot(document.getElementById('root')).render(
+//   <StrictMode>
+//     <App />
+//   </StrictMode>,
+// )
+// client/src/main.jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import './index.css'; 
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\Dashboard.jsx
+========================================
+
+import React, { useState } from 'react';
+import { Card, Form, Button, Row, Col, Table } from 'react-bootstrap';
+import { Plus, Trash2, Save, PackagePlus } from 'lucide-react';
+import axios from 'axios';
+import api from '../api';
+
+const Dashboard = () => {
+  const [orderHeader, setOrderHeader] = useState({
+    orderId: '',
+    date: new Date().toISOString().split('T')[0],
+    platform: 'Amazon',
+    platformAccount: '',
+    cardUsed: '', // Separate Field
+    cashbackAmount: 0, // Separate Field
+    deliveryDate: '', // Estimated Delivery Date
+    deliverySlot: '7 - 10 PM' // Estimated Delivery Time Slot
+  });
+
+  const [products, setProducts] = useState([
+    { productName: '', qty: 1, listingPrice: 0, listingTotal: 0, buyingPrice: 0, buyingTotal: 0, sellingPrice: 0, sellingTotal: 0, netProfit: 0 }
+  ]);
+
+  const handleHeaderChange = (e) => {
+    setOrderHeader({ ...orderHeader, [e.target.name]: e.target.value });
+  };
+
+  const handleProductChange = (index, e) => {
+    const { name, value } = e.target;
+    const newProducts = [...products];
+    newProducts[index][name] = value;
+
+    const q = parseFloat(newProducts[index].qty) || 0;
+    const lp = parseFloat(newProducts[index].listingPrice) || 0;
+    const bp = parseFloat(newProducts[index].buyingPrice) || 0;
+    const sp = parseFloat(newProducts[index].sellingPrice) || 0;
+
+    newProducts[index].listingTotal = (lp * q).toFixed(2);
+    newProducts[index].buyingTotal = (bp * q).toFixed(2);
+    newProducts[index].sellingTotal = (sp * q).toFixed(2);
+    newProducts[index].netProfit = ((sp * q) - (bp * q)).toFixed(2);
+
+    setProducts(newProducts);
+  };
+
+  const addProductRow = () => {
+    setProducts([...products, { productName: '', qty: 1, listingPrice: 0, listingTotal: 0, buyingPrice: 0, buyingTotal: 0, sellingPrice: 0, sellingTotal: 0, netProfit: 0 }]);
+  };
+
+  const removeProductRow = (index) => {
+    if (products.length > 1) setProducts(products.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const totalListing = products.reduce((acc, p) => acc + parseFloat(p.listingTotal), 0);
+    const totalBuying = products.reduce((acc, p) => acc + parseFloat(p.buyingTotal), 0);
+    const totalSelling = products.reduce((acc, p) => acc + parseFloat(p.sellingTotal), 0);
+    const totalProfit = products.reduce((acc, p) => acc + parseFloat(p.netProfit), 0);
+
+    const finalOrder = {
+      ...orderHeader,
+      products,
+      totalListingPrice: totalListing.toFixed(2),
+      totalBuyingPrice: totalBuying.toFixed(2),
+      totalSellingPrice: totalSelling.toFixed(2),
+      totalOrderProfit: totalProfit.toFixed(2)
+    };
+
+    try {
+      // await axios.post('http://localhost:5000/api/orders', finalOrder);
+      await api.post('/api/orders', finalOrder);
+      alert("✅ Order Saved Successfully!");
+      window.location.reload();
+    } catch (err) {
+      alert("Error saving order. Make sure backend is running.");
+    }
+  };
+
+  return (
+    <div className="container-fluid py-4">
+      <h2 className="mb-4 text-primary fw-bold"><PackagePlus size={32} className="me-2"/>Order Entry Dashboard</h2>
+      <Form onSubmit={handleSubmit}>
+        <Card className="shadow-sm border-0 mb-4 bg-light">
+          <Card.Header className="bg-primary text-white fw-bold">1. Order & Delivery Details</Card.Header>
+          <Card.Body>
+            <Row className="g-3">
+              <Col md={3}><Form.Label>Order ID</Form.Label><Form.Control name="orderId" required onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label>Order Date</Form.Label><Form.Control type="date" name="date" value={orderHeader.date} onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label>Marketplace</Form.Label><Form.Select name="platform" onChange={handleHeaderChange}><option>Amazon</option><option>Flipkart</option><option>Other</option></Form.Select></Col>
+              <Col md={3}><Form.Label>Account Name</Form.Label><Form.Control name="platformAccount" placeholder="e.g. Nikhil" onChange={handleHeaderChange} /></Col>
+              
+              <Col md={3}><Form.Label>Card Used</Form.Label><Form.Control name="cardUsed" placeholder="e.g. SBI Credit Card" onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label>Cashback Amount (₹)</Form.Label><Form.Control type="number" name="cashbackAmount" onChange={handleHeaderChange} /></Col>
+              
+              <Col md={3}><Form.Label>Est. Delivery Date</Form.Label><Form.Control type="date" name="deliveryDate" required onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label>Est. Delivery Time Slot</Form.Label><Form.Control name="deliverySlot" defaultValue="7 - 10 PM" onChange={handleHeaderChange} /></Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        <Card className="shadow-sm border-0">
+          <Card.Header className="bg-dark text-white d-flex justify-content-between align-items-center fw-bold">
+            2. Product Pricing (Auto-Calculated)
+            <Button variant="outline-light" size="sm" onClick={addProductRow}><Plus size={18} /> Add Row</Button>
+          </Card.Header>
+          <Table responsive bordered className="mb-0 text-center align-middle">
+            <thead className="table-secondary small fw-bold text-uppercase">
+              <tr>
+                <th>Product</th>
+                <th style={{width: '80px'}}>Qty</th>
+                <th>List Price</th>
+                <th className="bg-info bg-opacity-10">List Total</th>
+                <th>Buy Price</th>
+                <th className="bg-warning bg-opacity-10">Buy Total</th>
+                <th>Sell Price</th>
+                <th className="bg-primary bg-opacity-10">Sell Total</th>
+                <th className="bg-success text-white">Profit</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {products.map((p, i) => (
+                <tr key={i}>
+                  <td><Form.Control size="sm" name="productName" required onChange={(e) => handleProductChange(i, e)} /></td>
+                  <td><Form.Control size="sm" type="number" name="qty" value={p.qty} onChange={(e) => handleProductChange(i, e)} /></td>
+                  <td><Form.Control size="sm" type="number" name="listingPrice" onChange={(e) => handleProductChange(i, e)} /></td>
+                  <td className="fw-bold">₹{p.listingTotal}</td>
+                  <td><Form.Control size="sm" type="number" name="buyingPrice" onChange={(e) => handleProductChange(i, e)} /></td>
+                  <td className="fw-bold">₹{p.buyingTotal}</td>
+                  <td><Form.Control size="sm" type="number" name="sellingPrice" onChange={(e) => handleProductChange(i, e)} /></td>
+                  <td className="fw-bold">₹{p.sellingTotal}</td>
+                  <td className="fw-bold text-success">₹{p.netProfit}</td>
+                  <td><Button variant="link" className="text-danger p-0" onClick={() => removeProductRow(i)}><Trash2 size={20}/></Button></td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          <Card.Footer className="text-end bg-white py-3">
+            <Button type="submit" variant="success" size="lg" className="px-5 shadow-sm fw-bold"><Save className="me-2"/>Save Full Order</Button>
+          </Card.Footer>
+        </Card>
+      </Form>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\Dashboard1.jsx
+========================================
+
+// import React, { useState } from 'react';
+// import { Card, Form, Button, Row, Col, Table } from 'react-bootstrap';
+// import { Plus, Trash2, Save } from 'lucide-react';
+// import axios from 'axios';
+
+// const Dashboard = () => {
+//   // 1. Initial State structure
+//   const [orderHeader, setOrderHeader] = useState({
+//     orderId: '',
+//     date: new Date().toISOString().split('T')[0], // Default today
+//     time: '',
+//     platform: 'Amazon',
+//     platformAccount: '',
+//     cardUsed: '',
+//     cashback: 0,
+//     deliveryDate: '',
+//     deliverySlot: '7 - 10 PM'
+//   });
+
+//   const [products, setProducts] = useState([
+//     { productName: '', qty: 1, listingPrice: 0, buyingPrice: 0, sellingPrice: 0 }
+//   ]);
+
+//   // 2. Handle Header changes (Top section)
+//   const handleHeaderChange = (e) => {
+//     setOrderHeader({ ...orderHeader, [e.target.name]: e.target.value });
+//   };
+
+//   // 3. Handle Product changes (Dynamic rows)
+//   const handleProductChange = (index, e) => {
+//     const newProducts = [...products];
+//     newProducts[index][e.target.name] = e.target.value;
+//     setProducts(newProducts);
+//   };
+
+//   // 4. Add/Remove Product Rows
+//   const addProductRow = () => {
+//     setProducts([...products, { productName: '', qty: 1, listingPrice: 0, buyingPrice: 0, sellingPrice: 0 }]);
+//   };
+
+//   const removeProductRow = (index) => {
+//     const newProducts = products.filter((_, i) => i !== index);
+//     setProducts(newProducts);
+//   };
+
+//   // 5. Submit to Backend
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     // Calculate profits before sending
+//     let totalOrderProfit = 0;
+//     const processedProducts = products.map(p => {
+//       const netProfit = (parseFloat(p.sellingPrice) - parseFloat(p.buyingPrice)) * parseInt(p.qty);
+//       totalOrderProfit += netProfit;
+//       return { ...p, netProfit };
+//     });
+
+//     const finalOrder = {
+//       ...orderHeader,
+//       products: processedProducts,
+//       totalOrderProfit: totalOrderProfit
+//     };
+
+//     try {
+//       await axios.post('http://localhost:5000/api/orders', finalOrder);
+//       alert("Order saved successfully!");
+//       // Reset form if needed
+//       window.location.reload(); 
+//     } catch (err) {
+//       console.error(err);
+//       alert("Error saving order");
+//     }
+//   };
+
+//   return (
+//     <div className="container-fluid">
+//       <h3 className="mb-4">Create New Order</h3>
+//       <Form onSubmit={handleSubmit}>
+        
+//         {/* --- ORDER HEADER --- */}
+//         <Card className="mb-4 shadow-sm">
+//           <Card.Header className="bg-primary text-white">Order Details</Card.Header>
+//           <Card.Body>
+//             <Row className="g-3">
+//               <Col md={3}><Form.Label>Order ID</Form.Label><Form.Control name="orderId" required onChange={handleHeaderChange} /></Col>
+//               <Col md={3}><Form.Label>Date</Form.Label><Form.Control type="date" name="date" value={orderHeader.date} onChange={handleHeaderChange} /></Col>
+//               <Col md={2}><Form.Label>Time</Form.Label><Form.Control type="time" name="time" onChange={handleHeaderChange} /></Col>
+//               <Col md={2}><Form.Label>Platform</Form.Label><Form.Select name="platform" onChange={handleHeaderChange}><option>Amazon</option><option>Flipkart</option><option>Other</option></Form.Select></Col>
+//               <Col md={2}><Form.Label>Account Name</Form.Label><Form.Control name="platformAccount" placeholder="e.g. Nikhil" onChange={handleHeaderChange} /></Col>
+//               <Col md={3}><Form.Label>Card/Cashback Info</Form.Label><Form.Control name="cardUsed" placeholder="e.g. SBI 5%" onChange={handleHeaderChange} /></Col>
+//               <Col md={3}><Form.Label>Delivery Date</Form.Label><Form.Control type="date" name="deliveryDate" onChange={handleHeaderChange} /></Col>
+//               <Col md={3}><Form.Label>Delivery Slot</Form.Label><Form.Control name="deliverySlot" defaultValue="7 - 10 PM" onChange={handleHeaderChange} /></Col>
+//             </Row>
+//           </Card.Body>
+//         </Card>
+
+//         {/* --- PRODUCTS TABLE --- */}
+//         <Card className="shadow-sm">
+//           <Card.Header className="bg-dark text-white d-flex justify-content-between align-items-center">
+//             Products In This Order
+//             <Button variant="outline-light" size="sm" onClick={addProductRow}><Plus size={16} /> Add Product</Button>
+//           </Card.Header>
+//           <Card.Body>
+//             <Table responsive bordered hover>
+//               <thead className="table-light">
+//                 <tr>
+//                   <th>Product Name</th>
+//                   <th style={{width: '100px'}}>Qty</th>
+//                   <th>Listing Price</th>
+//                   <th>Buying Price</th>
+//                   <th>Selling Price</th>
+//                   <th style={{width: '50px'}}></th>
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {products.map((product, index) => (
+//                   <tr key={index}>
+//                     <td><Form.Control name="productName" required onChange={(e) => handleProductChange(index, e)} /></td>
+//                     <td><Form.Control type="number" name="qty" min="1" defaultValue="1" onChange={(e) => handleProductChange(index, e)} /></td>
+//                     <td><Form.Control type="number" name="listingPrice" onChange={(e) => handleProductChange(index, e)} /></td>
+//                     <td><Form.Control type="number" name="buyingPrice" onChange={(e) => handleProductChange(index, e)} /></td>
+//                     <td><Form.Control type="number" name="sellingPrice" onChange={(e) => handleProductChange(index, e)} /></td>
+//                     <td>
+//                       {products.length > 1 && (
+//                         <Button variant="outline-danger" size="sm" onClick={() => removeProductRow(index)}>
+//                           <Trash2 size={16} />
+//                         </Button>
+//                       )}
+//                     </td>
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </Table>
+//             <div className="text-end">
+//                <Button type="submit" variant="success" size="lg" className="px-5">
+//                  <Save size={20} className="me-2" /> Save Full Order
+//                </Button>
+//             </div>
+//           </Card.Body>
+//         </Card>
+//       </Form>
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
+import React, { useState } from 'react';
+import { Card, Form, Button, Row, Col, Table, InputGroup } from 'react-bootstrap';
+import { Plus, Trash2, Save, PackagePlus, Calculator } from 'lucide-react';
+import axios from 'axios';
+
+const Dashboard = () => {
+  // 1. Order Header State (Fields that appear once per order)
+  const [orderHeader, setOrderHeader] = useState({
+    orderId: '',
+    date: new Date().toISOString().split('T')[0],
+    time: '',
+    platform: 'Amazon',
+    platformAccount: '',
+    cardUsed: '',
+    cashbackAmount: 0, // General cashback for the whole order
+    deliveryDate: '',
+    deliverySlot: '7 - 10 PM'
+  });
+
+  // 2. Products State (Multiple rows)
+  const [products, setProducts] = useState([
+    { 
+        productName: '', 
+        qty: 1, 
+        listingPrice: 0, 
+        listingTotal: 0,
+        cashback: 0, 
+        buyingPrice: 0, 
+        buyingTotal: 0,
+        sellingPrice: 0,
+        sellingTotal: 0,
+        netProfit: 0 
+    }
+  ]);
+
+  // Handle Header Changes
+  const handleHeaderChange = (e) => {
+    setOrderHeader({ ...orderHeader, [e.target.name]: e.target.value });
+  };
+
+  // 3. Handle Product Changes + Automatic Calculations
+  const handleProductChange = (index, e) => {
+    const { name, value } = e.target;
+    const newProducts = [...products];
+    
+    // Update the changed field
+    newProducts[index][name] = value;
+
+    // Perform Calculations
+    const q = parseFloat(newProducts[index].qty) || 0;
+    const lp = parseFloat(newProducts[index].listingPrice) || 0;
+    const bp = parseFloat(newProducts[index].buyingPrice) || 0;
+    const sp = parseFloat(newProducts[index].sellingPrice) || 0;
+
+    // Logic: Totals = Price * Quantity
+    newProducts[index].listingTotal = (lp * q).toFixed(2);
+    newProducts[index].buyingTotal = (bp * q).toFixed(2);
+    newProducts[index].sellingTotal = (sp * q).toFixed(2);
+    
+    // Logic: Profit = (Selling Total - Buying Total)
+    newProducts[index].netProfit = ((sp * q) - (bp * q)).toFixed(2);
+
+    setProducts(newProducts);
+  };
+
+  const addProductRow = () => {
+    setProducts([...products, { 
+        productName: '', qty: 1, listingPrice: 0, listingTotal: 0, 
+        cashback: 0, buyingPrice: 0, buyingTotal: 0, 
+        sellingPrice: 0, sellingTotal: 0, netProfit: 0 
+    }]);
+  };
+
+  const removeProductRow = (index) => {
+    if(products.length > 1) {
+        const newProducts = products.filter((_, i) => i !== index);
+        setProducts(newProducts);
+    }
+  };
+
+  // 4. Submit to Backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Calculate Total Order Profit for the summary
+    const totalOrderProfit = products.reduce((acc, p) => acc + parseFloat(p.netProfit), 0);
+
+    const finalOrder = {
+      ...orderHeader,
+      products: products,
+      totalOrderProfit: totalOrderProfit.toFixed(2)
+    };
+
+    try {
+      await axios.post('http://localhost:5000/api/orders', finalOrder);
+      alert("🎉 Order Saved Successfully!");
+      window.location.reload(); // Reset form
+    } catch (err) {
+      console.error(err);
+      alert("Error saving order. Check if server is running.");
+    }
+  };
+
+  return (
+    <div className="container-fluid py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="fw-bold text-dark"><PackagePlus className="me-2" /> New Order Entry</h2>
+        <div className="text-muted small">MERN Store Manager v1.1</div>
+      </div>
+
+      <Form onSubmit={handleSubmit}>
+        {/* --- SECTION 1: ORDER HEADER --- */}
+        <Card className="shadow-sm border-0 mb-4">
+          <Card.Header className="bg-primary text-white fw-bold">1. Platform & Account Details</Card.Header>
+          <Card.Body className="bg-light">
+            <Row className="g-3">
+              <Col md={3}>
+                <Form.Label className="small fw-bold">Order ID</Form.Label>
+                <Form.Control name="orderId" placeholder="e.g. 405-..." required onChange={handleHeaderChange} />
+              </Col>
+              <Col md={3}>
+                <Form.Label className="small fw-bold">Order Date</Form.Label>
+                <Form.Control type="date" name="date" value={orderHeader.date} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={2}>
+                <Form.Label className="small fw-bold">Marketplace</Form.Label>
+                <Form.Select name="platform" onChange={handleHeaderChange}>
+                  <option>Amazon</option>
+                  <option>Flipkart</option>
+                  <option>Blinkit</option>
+                  <option>Other</option>
+                </Form.Select>
+              </Col>
+              <Col md={2}>
+                <Form.Label className="small fw-bold">Account</Form.Label>
+                <Form.Control name="platformAccount" placeholder="Nikhil / D" onChange={handleHeaderChange} />
+              </Col>
+              <Col md={2}>
+                <Form.Label className="small fw-bold">Card/Cashback</Form.Label>
+                <Form.Control name="cardUsed" placeholder="SBI / 460" onChange={handleHeaderChange} />
+              </Col>
+            </Row>
+            <Row className="g-3 mt-2">
+               <Col md={3}>
+                <Form.Label className="small fw-bold">Delivery Date</Form.Label>
+                <Form.Control type="date" name="deliveryDate" onChange={handleHeaderChange} />
+              </Col>
+              <Col md={3}>
+                <Form.Label className="small fw-bold">Delivery Time Slot</Form.Label>
+                <Form.Control name="deliverySlot" defaultValue="7 - 10 PM" onChange={handleHeaderChange} />
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        {/* --- SECTION 2: PRODUCT TABLE (THE CORE LOGIC) --- */}
+        <Card className="shadow-sm border-0">
+          <Card.Header className="bg-dark text-white d-flex justify-content-between align-items-center">
+            <span className="fw-bold"><Calculator size={18} className="me-2"/> 2. Products & Pricing</span>
+            <Button variant="outline-light" size="sm" onClick={addProductRow}>
+              <Plus size={16} /> Add Another Product
+            </Button>
+          </Card.Header>
+          <Card.Body className="p-0">
+            <Table responsive bordered hover className="mb-0 align-middle text-center">
+              <thead className="table-secondary small">
+                <tr>
+                  <th style={{minWidth: '200px'}}>Product Name</th>
+                  <th style={{width: '80px'}}>Qty</th>
+                  <th>Listing Price</th>
+                  <th className="bg-info bg-opacity-10">Listing Total</th>
+                  <th>Cashback</th>
+                  <th>Buying Price</th>
+                  <th className="bg-warning bg-opacity-10">Buying Total</th>
+                  <th>Selling Price</th>
+                  <th className="bg-primary bg-opacity-10">Selling Total</th>
+                  <th className="bg-success text-white">Net Profit</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Form.Control size="sm" name="productName" placeholder="e.g. Golddrop Oil" required onChange={(e) => handleProductChange(index, e)} />
+                    </td>
+                    <td>
+                      <Form.Control size="sm" type="number" name="qty" value={product.qty} min="1" onChange={(e) => handleProductChange(index, e)} />
+                    </td>
+                    
+                    {/* Listing */}
+                    <td><Form.Control size="sm" type="number" name="listingPrice" placeholder="0" onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold text-muted">₹{product.listingTotal}</td>
+
+                    {/* Cashback/Discount per product */}
+                    <td><Form.Control size="sm" type="number" name="cashback" placeholder="0" onChange={(e) => handleProductChange(index, e)} /></td>
+
+                    {/* Buying */}
+                    <td><Form.Control size="sm" type="number" name="buyingPrice" placeholder="0" onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold text-dark">₹{product.buyingTotal}</td>
+
+                    {/* Selling */}
+                    <td><Form.Control size="sm" type="number" name="sellingPrice" placeholder="0" onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold text-primary">₹{product.sellingTotal}</td>
+
+                    {/* Final Profit for this row */}
+                    <td className="fw-bold text-success" style={{backgroundColor: '#f0fff4'}}>₹{product.netProfit}</td>
+
+                    <td>
+                      <Button variant="link" className="text-danger p-0" onClick={() => removeProductRow(index)}>
+                        <Trash2 size={18} />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card.Body>
+          <Card.Footer className="bg-white p-3 d-flex justify-content-between align-items-center">
+             <div className="text-muted small italic">* All totals are calculated automatically based on Quantity.</div>
+             <Button type="submit" variant="success" size="lg" className="px-5 fw-bold shadow">
+                <Save className="me-2" /> Save Order to Logs
+             </Button>
+          </Card.Footer>
+        </Card>
+      </Form>
+    </div>
+  );
+};
+
+export default Dashboard;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\EditOrder.jsx
+========================================
+
+import React, { useState, useEffect } from 'react';
+import { Card, Form, Button, Row, Col, Table, Spinner } from 'react-bootstrap';
+import { Plus, Trash2, Save, ArrowLeft, Calculator } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import api from '../api';
+
+const EditOrder = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  const [orderHeader, setOrderHeader] = useState({
+    orderId: '', date: '', platform: 'Amazon', platformAccount: '',
+    cardUsed: '', cashbackAmount: 0, deliveryDate: '', deliverySlot: '7 - 10 PM'
+  });
+
+  const [products, setProducts] = useState([]);
+
+  // Helper: Calculate all totals for a single row
+  const calculateRow = (row) => {
+    const q = parseFloat(row.qty) || 0;
+    const lp = parseFloat(row.listingPrice) || 0;
+    const bp = parseFloat(row.buyingPrice) || 0;
+    const sp = parseFloat(row.sellingPrice) || 0;
+
+    return {
+      ...row,
+      listingTotal: (lp * q).toFixed(2),
+      buyingTotal: (bp * q).toFixed(2),
+      sellingTotal: (sp * q).toFixed(2),
+      netProfit: ((sp - bp) * q).toFixed(2)
+    };
+  };
+
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/api/orders');
+        const currentOrder = res.data.find(o => o._id === id);
+        
+        if (currentOrder) {
+          setOrderHeader({
+            orderId: currentOrder.orderId, date: currentOrder.date,
+            platform: currentOrder.platform, platformAccount: currentOrder.platformAccount,
+            cardUsed: currentOrder.cardUsed, cashbackAmount: currentOrder.cashbackAmount,
+            deliveryDate: currentOrder.deliveryDate, deliverySlot: currentOrder.deliverySlot
+          });
+
+          // IMPORTANT: Recalculate every row on load to fill in any missing totals
+          const recalculatedProducts = currentOrder.products.map(p => calculateRow(p));
+          setProducts(recalculatedProducts);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching order", err);
+        navigate('/order-logs');
+      }
+    };
+    fetchOrderDetails();
+  }, [id, navigate]);
+
+  const handleHeaderChange = (e) => {
+    setOrderHeader({ ...orderHeader, [e.target.name]: e.target.value });
+  };
+
+  // FIXED: Functional state update to prevent "lagging" calculations
+  const handleProductChange = (index, e) => {
+    const { name, value } = e.target;
+    
+    setProducts(prevProducts => {
+      const updatedProducts = [...prevProducts];
+      // Update the value, then immediately calculate based on the fresh data
+      const updatedRow = { ...updatedProducts[index], [name]: value };
+      updatedProducts[index] = calculateRow(updatedRow); 
+      return updatedProducts;
+    });
+  };
+
+  const addProductRow = () => {
+    const newRow = { 
+      productName: '', qty: 1, listingPrice: 0, listingTotal: "0.00", 
+      buyingPrice: 0, buyingTotal: "0.00", sellingPrice: 0, sellingTotal: "0.00", netProfit: "0.00" 
+    };
+    setProducts([...products, newRow]);
+  };
+
+  const removeProductRow = (index) => {
+    if (products.length > 1) setProducts(products.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Sum up the order-wide totals
+    const totalListing = products.reduce((acc, p) => acc + parseFloat(p.listingTotal), 0);
+    const totalBuying = products.reduce((acc, p) => acc + parseFloat(p.buyingTotal), 0);
+    const totalSelling = products.reduce((acc, p) => acc + parseFloat(p.sellingTotal), 0);
+    const totalProfit = products.reduce((acc, p) => acc + parseFloat(p.netProfit), 0);
+
+    const updatedOrder = {
+      ...orderHeader,
+      products: products,
+      totalListingPrice: totalListing.toFixed(2),
+      totalBuyingPrice: totalBuying.toFixed(2),
+      totalSellingPrice: totalSelling.toFixed(2),
+      totalOrderProfit: totalProfit.toFixed(2)
+    };
+
+    try {
+      await axios.put(`/api/orders/${id}`, updatedOrder);
+      alert("✅ Order Updated!");
+      navigate('/order-logs');
+    } catch (err) {
+      alert("Error updating order");
+    }
+  };
+
+  if (loading) return <div className="p-5 text-center"><Spinner animation="border" variant="primary" /></div>;
+
+  return (
+    <div className="container-fluid py-4">
+      <div className="d-flex align-items-center mb-4">
+        <Button variant="outline-secondary" className="me-3" onClick={() => navigate('/order-logs')}><ArrowLeft size={18} /></Button>
+        <h3 className="mb-0 fw-bold">Edit Order: #{orderHeader.orderId}</h3>
+      </div>
+
+      <Form onSubmit={handleSubmit}>
+        <Card className="mb-4 shadow-sm border-0 bg-light">
+          <Card.Header className="bg-primary text-white fw-bold">Order Details</Card.Header>
+          <Card.Body>
+            <Row className="g-3">
+              <Col md={3}><Form.Label className="small fw-bold">Order ID</Form.Label><Form.Control name="orderId" value={orderHeader.orderId} required onChange={handleHeaderChange} /></Col>
+              <Col md={2}><Form.Label className="small fw-bold">Platform</Form.Label><Form.Select name="platform" value={orderHeader.platform} onChange={handleHeaderChange}><option>Amazon</option><option>Flipkart</option><option>Other</option></Form.Select></Col>
+              <Col md={2}><Form.Label className="small fw-bold">Account</Form.Label><Form.Control name="platformAccount" value={orderHeader.platformAccount} onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label className="small fw-bold">Card Used</Form.Label><Form.Control name="cardUsed" value={orderHeader.cardUsed} onChange={handleHeaderChange} /></Col>
+              <Col md={2}><Form.Label className="small fw-bold">Cashback</Form.Label><Form.Control type="number" name="cashbackAmount" value={orderHeader.cashbackAmount} onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label className="small fw-bold">Delivery Date</Form.Label><Form.Control type="date" name="deliveryDate" value={orderHeader.deliveryDate} onChange={handleHeaderChange} /></Col>
+              <Col md={3}><Form.Label className="small fw-bold">Time Slot</Form.Label><Form.Control name="deliverySlot" value={orderHeader.deliverySlot} onChange={handleHeaderChange} /></Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        <Card className="shadow-sm border-0">
+          <Card.Header className="bg-dark text-white d-flex justify-content-between align-items-center fw-bold">
+            <span><Calculator size={18} className="me-2"/>Modify Pricing</span>
+            <Button variant="outline-light" size="sm" onClick={addProductRow}><Plus size={16} /> Add Product</Button>
+          </Card.Header>
+          <Card.Body className="p-0">
+            <Table responsive bordered hover className="mb-0 text-center align-middle">
+              <thead className="table-secondary small">
+                <tr>
+                  <th style={{ minWidth: '200px' }}>Product Name</th>
+                  <th style={{ width: '80px' }}>Qty</th>
+                  <th>List Price</th>
+                  <th className="bg-info bg-opacity-10">List Total</th>
+                  <th>Buy Price</th>
+                  <th className="bg-warning bg-opacity-10">Buy Total</th>
+                  <th>Sell Price</th>
+                  <th className="bg-primary bg-opacity-10">Sell Total</th>
+                  <th className="bg-success text-white">Profit</th>
+                  <th style={{ width: '50px' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product, index) => (
+                  <tr key={index}>
+                    <td><Form.Control size="sm" name="productName" value={product.productName} required onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td><Form.Control size="sm" type="number" name="qty" value={product.qty} onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td><Form.Control size="sm" type="number" name="listingPrice" value={product.listingPrice} onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold">₹{product.listingTotal}</td>
+                    <td><Form.Control size="sm" type="number" name="buyingPrice" value={product.buyingPrice} onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold">₹{product.buyingTotal}</td>
+                    <td><Form.Control size="sm" type="number" name="sellingPrice" value={product.sellingPrice} onChange={(e) => handleProductChange(index, e)} /></td>
+                    <td className="fw-bold text-primary">₹{product.sellingTotal}</td>
+                    <td className="fw-bold text-success" style={{backgroundColor: '#f0fff4'}}>₹{product.netProfit}</td>
+                    <td><Button variant="link" className="text-danger p-0" onClick={() => removeProductRow(index)}><Trash2 size={18} /></Button></td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <div className="p-3 bg-light d-flex justify-content-end gap-2">
+              <Button variant="secondary" onClick={() => navigate('/order-logs')}>Cancel</Button>
+              <Button type="submit" variant="primary" className="fw-bold px-4"><Save size={18} className="me-2" /> Save Changes</Button>
+            </div>
+          </Card.Body>
+        </Card>
+      </Form>
+    </div>
+  );
+};
+
+export default EditOrder;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\EditOrder1.jsx
+========================================
+
+import React, { useState, useEffect } from 'react';
+import { Card, Form, Button, Row, Col, Table, Spinner } from 'react-bootstrap';
+import { Plus, Trash2, Save, ArrowLeft } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const EditOrder = () => {
+  const { id } = useParams(); // Get the order ID from the URL
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  // 1. State structure
+  const [orderHeader, setOrderHeader] = useState({
+    orderId: '',
+    date: '',
+    time: '',
+    platform: '',
+    platformAccount: '',
+    cardUsed: '',
+    cashback: 0,
+    deliveryDate: '',
+    deliverySlot: ''
+  });
+
+  const [products, setProducts] = useState([]);
+
+  // 2. Fetch existing order data on load
+  useEffect(() => {
+    const fetchOrderDetails = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/orders`);
+        // Filter the specific order from the list (or you can create a specific GET by ID route)
+        const currentOrder = res.data.find(o => o._id === id);
+        
+        if (currentOrder) {
+          setOrderHeader({
+            orderId: currentOrder.orderId,
+            date: currentOrder.date,
+            time: currentOrder.time,
+            platform: currentOrder.platform,
+            platformAccount: currentOrder.platformAccount,
+            cardUsed: currentOrder.cardUsed,
+            cashback: currentOrder.cashback,
+            deliveryDate: currentOrder.deliveryDate,
+            deliverySlot: currentOrder.deliverySlot
+          });
+          setProducts(currentOrder.products);
+        }
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching order", err);
+        alert("Could not load order details");
+        navigate('/order-logs');
+      }
+    };
+    fetchOrderDetails();
+  }, [id, navigate]);
+
+  // 3. Handle Form Changes
+  const handleHeaderChange = (e) => {
+    setOrderHeader({ ...orderHeader, [e.target.name]: e.target.value });
+  };
+
+  const handleProductChange = (index, e) => {
+    const newProducts = [...products];
+    newProducts[index][e.target.name] = e.target.value;
+    setProducts(newProducts);
+  };
+
+  const addProductRow = () => {
+    setProducts([...products, { productName: '', qty: 1, listingPrice: 0, buyingPrice: 0, sellingPrice: 0 }]);
+  };
+
+  const removeProductRow = (index) => {
+    const newProducts = products.filter((_, i) => i !== index);
+    setProducts(newProducts);
+  };
+
+  // 4. Submit Update
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    let totalOrderProfit = 0;
+    const processedProducts = products.map(p => {
+      const netProfit = (parseFloat(p.sellingPrice) - parseFloat(p.buyingPrice)) * parseInt(p.qty);
+      totalOrderProfit += netProfit;
+      return { ...p, netProfit };
+    });
+
+    const updatedOrder = {
+      ...orderHeader,
+      products: processedProducts,
+      totalOrderProfit: totalOrderProfit
+    };
+
+    try {
+      await axios.put(`http://localhost:5000/api/orders/${id}`, updatedOrder);
+      alert("Order updated successfully!");
+      navigate('/order-logs'); // Go back to logs
+    } catch (err) {
+      console.error(err);
+      alert("Error updating order");
+    }
+  };
+
+  if (loading) return <div className="p-5 text-center"><Spinner animation="border" /></div>;
+
+  return (
+    <div className="container-fluid">
+      <div className="d-flex align-items-center mb-4">
+        <Button variant="outline-secondary" className="me-3" onClick={() => navigate('/order-logs')}>
+          <ArrowLeft size={18} />
+        </Button>
+        <h3 className="mb-0">Edit Order: {orderHeader.orderId}</h3>
+      </div>
+
+      <Form onSubmit={handleSubmit}>
+        <Card className="mb-4 shadow-sm border-0">
+          <Card.Header className="bg-primary text-white">Order Header Details</Card.Header>
+          <Card.Body>
+            <Row className="g-3">
+              <Col md={3}>
+                <Form.Label>Order ID</Form.Label>
+                <Form.Control name="orderId" value={orderHeader.orderId} required onChange={handleHeaderChange} />
+              </Col>
+              <Col md={3}>
+                <Form.Label>Date</Form.Label>
+                <Form.Control type="date" name="date" value={orderHeader.date} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={2}>
+                <Form.Label>Time</Form.Label>
+                <Form.Control type="time" name="time" value={orderHeader.time} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={2}>
+                <Form.Label>Platform</Form.Label>
+                <Form.Select name="platform" value={orderHeader.platform} onChange={handleHeaderChange}>
+                  <option>Amazon</option>
+                  <option>Flipkart</option>
+                  <option>Blinkit</option>
+                  <option>Other</option>
+                </Form.Select>
+              </Col>
+              <Col md={2}>
+                <Form.Label>Account</Form.Label>
+                <Form.Control name="platformAccount" value={orderHeader.platformAccount} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={4}>
+                <Form.Label>Card/Cashback Used</Form.Label>
+                <Form.Control name="cardUsed" value={orderHeader.cardUsed} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={4}>
+                <Form.Label>Delivery Date</Form.Label>
+                <Form.Control type="date" name="deliveryDate" value={orderHeader.deliveryDate} onChange={handleHeaderChange} />
+              </Col>
+              <Col md={4}>
+                <Form.Label>Delivery Slot</Form.Label>
+                <Form.Control name="deliverySlot" value={orderHeader.deliverySlot} onChange={handleHeaderChange} />
+              </Col>
+            </Row>
+          </Card.Body>
+        </Card>
+
+        <Card className="shadow-sm border-0">
+          <Card.Header className="bg-dark text-white d-flex justify-content-between align-items-center">
+            Modify Products
+            <Button variant="outline-light" size="sm" onClick={addProductRow}>
+              <Plus size={16} /> Add Product
+            </Button>
+          </Card.Header>
+          <Card.Body>
+            <Table responsive bordered hover>
+              <thead className="table-light">
+                <tr>
+                  <th>Product Name</th>
+                  <th style={{ width: '100px' }}>Qty</th>
+                  <th>Listing Price</th>
+                  <th>Buying Price</th>
+                  <th>Selling Price</th>
+                  <th style={{ width: '50px' }}></th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product, index) => (
+                  <tr key={index}>
+                    <td>
+                      <Form.Control 
+                        name="productName" 
+                        value={product.productName} 
+                        required 
+                        onChange={(e) => handleProductChange(index, e)} 
+                      />
+                    </td>
+                    <td>
+                      <Form.Control 
+                        type="number" 
+                        name="qty" 
+                        value={product.qty} 
+                        onChange={(e) => handleProductChange(index, e)} 
+                      />
+                    </td>
+                    <td>
+                      <Form.Control 
+                        type="number" 
+                        name="listingPrice" 
+                        value={product.listingPrice} 
+                        onChange={(e) => handleProductChange(index, e)} 
+                      />
+                    </td>
+                    <td>
+                      <Form.Control 
+                        type="number" 
+                        name="buyingPrice" 
+                        value={product.buyingPrice} 
+                        onChange={(e) => handleProductChange(index, e)} 
+                      />
+                    </td>
+                    <td>
+                      <Form.Control 
+                        type="number" 
+                        name="sellingPrice" 
+                        value={product.sellingPrice} 
+                        onChange={(e) => handleProductChange(index, e)} 
+                      />
+                    </td>
+                    <td>
+                      {products.length > 1 && (
+                        <Button variant="outline-danger" size="sm" onClick={() => removeProductRow(index)}>
+                          <Trash2 size={16} />
+                        </Button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+            <div className="d-flex justify-content-end gap-2">
+              <Button variant="secondary" onClick={() => navigate('/order-logs')}>Cancel</Button>
+              <Button type="submit" variant="primary" className="px-4">
+                <Save size={18} className="me-2" /> Save Changes
+              </Button>
+            </div>
+          </Card.Body>
+        </Card>
+      </Form>
+    </div>
+  );
+};
+
+export default EditOrder;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\OrderLogs.jsx
+========================================
+
+// import React, { useState, useEffect } from 'react';
+// import { Table, Button, Badge, Card, Modal, Form } from 'react-bootstrap';
+// import { FileSpreadsheet, Truck, Edit3, CheckCircle, XCircle, PackageCheck } from 'lucide-react';
+// import axios from 'axios';
+// import * as XLSX from 'xlsx';
+// import { useNavigate } from 'react-router-dom';
+
+// const OrderLogs = () => {
+//   const [orders, setOrders] = useState([]);
+//   const [showPayModal, setShowPayModal] = useState(false);
+//   const [selectedOrder, setSelectedOrder] = useState(null);
+//   const [payData, setPayData] = useState({ receivedDate: new Date().toISOString().split('T')[0], amountReceived: 0, paymentMethod: 'UPI' });
+//   const navigate = useNavigate();
+
+//   useEffect(() => { fetchOrders(); }, []);
+//   const fetchOrders = async () => { const res = await axios.get('http://localhost:5000/api/orders'); setOrders(res.data); };
+
+//   const toggleDelivery = async (id) => { 
+//     await axios.patch(`http://localhost:5000/api/orders/${id}/delivery`); 
+//     fetchOrders(); 
+//   };
+
+//   const handlePayClick = (order) => { 
+//     setSelectedOrder(order); 
+//     setPayData({...payData, amountReceived: order.totalBuyingPrice}); 
+//     setShowPayModal(true); 
+//   };
+
+//   const submitPayment = async () => {
+//     await axios.patch(`http://localhost:5000/api/orders/${selectedOrder._id}/payment`, { isReceived: true, ...payData });
+//     setShowPayModal(false);
+//     fetchOrders();
+//   };
+
+//   const exportToExcel = () => {
+//     const flatData = [];
+//     orders.forEach(order => {
+//       order.products.forEach((p, idx) => {
+//         flatData.push({
+//           "Order ID": idx === 0 ? order.orderId : "",
+//           "Date": idx === 0 ? order.date : "",
+//           "Account": idx === 0 ? order.platformAccount : "",
+//           "Card Used": idx === 0 ? order.cardUsed : "",
+//           "Cashback": idx === 0 ? order.cashbackAmount : "",
+//           "Product": p.productName,
+//           "Qty": p.qty,
+//           "List Total": p.listingTotal,
+//           "Buy Total": p.buyingTotal,
+//           "Sell Total": p.sellingTotal,
+//           "Profit": p.netProfit,
+//           "Deliv Date": idx === 0 ? order.deliveryDate : "",
+//           "Deliv Slot": idx === 0 ? order.deliverySlot : "",
+//           "Status": idx === 0 ? (order.isDelivered ? "Delivered" : "Pending") : ""
+//         });
+//       });
+//       flatData.push({ "Product": "ORDER TOTALS", "List Total": order.totalListingPrice, "Buy Total": order.totalBuyingPrice, "Sell Total": order.totalSellingPrice, "Profit": order.totalOrderProfit });
+//     });
+//     const ws = XLSX.utils.json_to_sheet(flatData);
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, "Store Logs");
+//     XLSX.writeFile(wb, "Store_Management_Export.xlsx");
+//   };
+
+//   return (
+//     <div className="container-fluid py-4">
+//       <div className="d-flex justify-content-between align-items-center mb-4">
+//         <h3 className="fw-bold">All Orders History</h3>
+//         <Button variant="success" onClick={exportToExcel}><FileSpreadsheet className="me-2"/>Export to Excel</Button>
+//       </div>
+
+//       <Table bordered hover responsive className="bg-white align-middle text-center small shadow-sm">
+//         <thead className="table-dark">
+//           <tr>
+//             <th>Order / Card / Cashback</th>
+//             <th>Product Details</th>
+//             <th>List Total</th>
+//             <th>Buy Total</th>
+//             <th>Sell Total</th>
+//             <th>Profit</th>
+//             <th>Delivery Status</th>
+//             <th>Paid?</th>
+//             <th>Actions</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {orders.map((order) => (
+//             <React.Fragment key={order._id}>
+//               {order.products.map((p, idx) => (
+//                 <tr key={idx}>
+//                   {idx === 0 && (
+//                     <td rowSpan={order.products.length} className="bg-light">
+//                       <strong>{order.orderId}</strong><br/>
+//                       <Badge bg="info">{order.platformAccount}</Badge><br/>
+//                       <small className="text-muted">{order.cardUsed}</small><br/>
+//                       <Badge bg="warning" text="dark">₹{order.cashbackAmount}</Badge>
+//                     </td>
+//                   )}
+//                   <td className="text-start">{p.productName} <Badge bg="secondary">x{p.qty}</Badge></td>
+//                   <td>₹{p.listingTotal}</td>
+//                   <td>₹{p.buyingTotal}</td>
+//                   <td>₹{p.sellingTotal}</td>
+//                   <td className="text-success fw-bold">₹{p.netProfit}</td>
+//                   {idx === 0 && (
+//                     <td rowSpan={order.products.length}>
+//                       <Button variant={order.isDelivered ? "success" : "outline-warning"} size="sm" onClick={() => toggleDelivery(order._id)}>
+//                         {order.isDelivered ? <><PackageCheck size={16}/> Delivered</> : <><Truck size={16}/> Mark Deliv.</>}
+//                       </Button>
+//                       <div className="small mt-1 text-muted">{order.deliveryDate}</div>
+//                     </td>
+//                   )}
+//                   {idx === 0 && (
+//                     <td rowSpan={order.products.length} style={{ backgroundColor: order.paymentStatus.isReceived ? '#e8f5e9' : '#fff8e1' }}>
+//                       {order.paymentStatus.isReceived ? (
+//                         <div className="text-success"><CheckCircle size={20}/><br/><small>Paid</small></div>
+//                       ) : (
+//                         <Button variant="link" className="text-danger p-0" onClick={() => handlePayClick(order)}>
+//                           <XCircle size={20}/><br/><small>Unpaid</small>
+//                         </Button>
+//                       )}
+//                     </td>
+//                   )}
+//                   {idx === 0 && (
+//                     <td rowSpan={order.products.length}>
+//                       <Button variant="outline-primary" size="sm" onClick={() => navigate(`/edit-order/${order._id}`)}><Edit3 size={16}/></Button>
+//                     </td>
+//                   )}
+//                 </tr>
+//               ))}
+//               <tr className="table-secondary fw-bold">
+//                 <td colSpan="2" className="text-end">SUMMARY TOTALS:</td>
+//                 <td>₹{order.totalListingPrice}</td>
+//                 <td>₹{order.totalBuyingPrice}</td>
+//                 <td>₹{order.totalSellingPrice}</td>
+//                 <td colSpan="3" className="text-success">Net Profit: ₹{order.totalOrderProfit}</td>
+//                 <td></td>
+//               </tr>
+//             </React.Fragment>
+//           ))}
+//         </tbody>
+//       </Table>
+
+//       <Modal show={showPayModal} onHide={() => setShowPayModal(false)} centered>
+//         <Modal.Header closeButton><Modal.Title>Receive Payment</Modal.Title></Modal.Header>
+//         <Modal.Body>
+//           <Form.Group className="mb-3"><Form.Label>Amount (₹)</Form.Label><Form.Control type="number" value={payData.amountReceived} onChange={e => setPayData({...payData, amountReceived: e.target.value})}/></Form.Group>
+//           <Form.Group className="mb-3"><Form.Label>Method</Form.Label><Form.Select onChange={e => setPayData({...payData, paymentMethod: e.target.value})}><option>UPI</option><option>Cash</option></Form.Select></Form.Group>
+//         </Modal.Body>
+//         <Modal.Footer><Button variant="primary" onClick={submitPayment}>Confirm Paid</Button></Modal.Footer>
+//       </Modal>
+//     </div>
+//   );
+// };
+
+// export default OrderLogs;
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Badge, Card, Modal, Form } from 'react-bootstrap';
+import { FileSpreadsheet, Truck, Edit3, CheckCircle, XCircle, PackageCheck ,Trash2} from 'lucide-react';
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
+import { Upload } from 'lucide-react'; // Import Upload icon
+import api from '../api';
+
+const OrderLogs = () => {
+    const fileInputRef = useRef(null); // To trigger the hidden file input 
+  const [orders, setOrders] = useState([]);
+  const [showPayModal, setShowPayModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [payData, setPayData] = useState({ receivedDate: new Date().toISOString().split('T')[0], amountReceived: 0, paymentMethod: 'UPI' });
+  const navigate = useNavigate();
+  // Calculate Grand Totals for the bottom row
+const grandTotals = orders.reduce((acc, order) => {
+    acc.listing += parseFloat(order.totalListingPrice || 0);
+    acc.buying += parseFloat(order.totalBuyingPrice || 0);
+    acc.selling += parseFloat(order.totalSellingPrice || 0);
+    acc.profit += parseFloat(order.totalOrderProfit || 0);
+    return acc;
+}, { listing: 0, buying: 0, selling: 0, profit: 0 });
+
+// Calculate Grand Totals for the UI
+const grandListingTotal = orders.reduce((acc, order) => acc + parseFloat(order.totalListingPrice || 0), 0);
+const grandBuyingTotal = orders.reduce((acc, order) => acc + parseFloat(order.totalBuyingPrice || 0), 0);
+const grandSellingTotal = orders.reduce((acc, order) => acc + parseFloat(order.totalSellingPrice || 0), 0);
+const grandNetProfit = orders.reduce((acc, order) => acc + parseFloat(order.totalOrderProfit || 0), 0);
+
+  useEffect(() => { fetchOrders(); }, []);
+  const fetchOrders = async () => { const res = await axios.get('http://localhost:5000/api/orders'); setOrders(res.data); };
+
+  const toggleDelivery = async (id) => { 
+    try {
+        await axios.patch(`http://localhost:5000/api/orders/${id}/delivery`); 
+        fetchOrders(); 
+    } catch(err) { alert("Error toggling delivery"); }
+  };
+  // --- DELETE LOGIC ---
+  const handleDelete = async (id, orderId) => {
+    if (window.confirm(`Are you sure you want to delete Order #${orderId}? This cannot be undone.`)) {
+      try {
+        await axios.delete(`http://localhost:5000/api/orders/${id}`);
+        alert("Order Deleted");
+        fetchOrders(); // Refresh the list
+      } catch (err) {
+        alert("Error deleting order");
+      }
+    }
+  };
+
+  const handlePayClick = (order) => { 
+    setSelectedOrder(order); 
+    setPayData({...payData, amountReceived: order.totalSellingPrice}); // Usually received from father
+    setShowPayModal(true); 
+  };
+
+  const submitPayment = async () => {
+    try {
+        await axios.patch(`http://localhost:5000/api/orders/${selectedOrder._id}/payment`, { isReceived: true, ...payData });
+        setShowPayModal(false);
+        fetchOrders();
+    } catch(err) { alert("Error updating payment"); }
+  };
+
+  const exportToExcel = () => {
+    const flatData = [];
+    orders.forEach(order => {
+      order.products.forEach((p, idx) => {
+        flatData.push({
+          "Order ID": idx === 0 ? order.orderId : "",
+          "Date": idx === 0 ? order.date : "",
+          "Account": idx === 0 ? order.platformAccount : "",
+          "Card": idx === 0 ? order.cardUsed : "",
+          "Cashback": idx === 0 ? order.cashbackAmount : "",
+          "Listed Price": p.listingPrice,
+          "Listed Total": p.listingTotal,
+          "Product": p.productName,
+          "Buying Price": p.buyingPrice,
+          "Buying Total": p.buyingTotal,
+          "Quantity": p.qty,
+          "Selling Price": p.sellingPrice,
+          "Selling Total": p.sellingTotal,
+          "Net Profit": p.netProfit,
+          "Delivery Date": idx === 0 ? order.deliveryDate : "",
+          "Status": idx === 0 ? (order.isDelivered ? "Delivered" : "Pending") : "",
+          // --- NEW COLUMNS ADDED BELOW ---
+          "Payment Status": idx === 0 ? (order.paymentStatus.isReceived ? "PAID" : "UNPAID") : "",
+          "Paid Date": idx === 0 && order.paymentStatus.isReceived ? order.paymentStatus.receivedDate : "-",
+          "Paid Amount": idx === 0 && order.paymentStatus.isReceived ? order.paymentStatus.amountReceived : "0",
+          "Pay Method": idx === 0 && order.paymentStatus.isReceived ? order.paymentStatus.paymentMethod : "-"
+        });
+      });
+      flatData.push({ "Product": "TOTAL", "Listed Total": order.totalListingPrice, "Buying Total": order.totalBuyingPrice, "Selling Total": order.totalSellingPrice, "Net Profit": order.totalOrderProfit,"Payment Status": order.paymentStatus.isReceived ? "SETTLED" : "DUE"  });
+    });
+      // --- ADD THE GRAND TOTAL ROW TO EXCEL ---
+    flatData.push({}); // Empty row for spacing
+    flatData.push({
+      "Product": "GRAND TOTAL (ALL ORDERS)",
+      "Listed Total": grandTotals.listing.toFixed(2),
+      "Buying Total": grandTotals.buying.toFixed(2),
+      "Selling Total": grandTotals.selling.toFixed(2),
+      "Net Profit": grandTotals.profit.toFixed(2)
+    });
+    const ws = XLSX.utils.json_to_sheet(flatData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Store Logs");
+    XLSX.writeFile(wb, "Order_Management_Report.xlsx");
+  };
+  // const handleImport = (e) => {
+  //   const file = e.target.files[0];
+  //   const reader = new FileReader();
+
+  //   reader.onload = async (event) => {
+  //     const data = new Uint8Array(event.target.result);
+  //     const workbook = XLSX.read(data, { type: 'array' });
+  //     const sheetName = workbook.SheetNames[0];
+  //     const worksheet = workbook.Sheets[sheetName];
+  //     const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+  //     const ordersToUpload = [];
+  //     let currentOrder = null;
+
+  //     jsonData.forEach((row) => {
+  //       // Skip rows that are "TOTAL" or "GRAND TOTAL" rows from previous exports
+  //       if (row["Product"] === "TOTAL" || row["Product"] === "GRAND TOTAL (ALL ORDERS)") return;
+
+  //       // If 'Order ID' exists, it's a new order header
+  //       if (row["Order ID"] && row["Order ID"] !== "") {
+  //         if (currentOrder) ordersToUpload.push(currentOrder); // Save previous order
+
+  //         currentOrder = {
+  //           orderId: String(row["Order ID"]),
+  //           date: row["Date"],
+  //           platform: row["Platform"] || "Amazon",
+  //           platformAccount: row["Account"],
+  //           cardUsed: row["Card"],
+  //           cashbackAmount: parseFloat(row["Cashback"]) || 0,
+  //           deliveryDate: row["Delivery Date"],
+  //           deliverySlot: row["Deliv Slot"] || "7 - 10 PM",
+  //           products: [],
+  //           totalListingPrice: 0,
+  //           totalBuyingPrice: 0,
+  //           totalSellingPrice: 0,
+  //           totalOrderProfit: 0
+  //         };
+  //       }
+
+  //       // Add the product to the current active order
+  //       if (currentOrder) {
+  //         const product = {
+  //           productName: row["Product"],
+  //           qty: parseInt(row["Quantity"]) || 1,
+  //           listingPrice: parseFloat(row["Listed Price"]) || 0,
+  //           listingTotal: parseFloat(row["Listed Total"]) || 0,
+  //           buyingPrice: parseFloat(row["Buying Price"]) || 0,
+  //           buyingTotal: parseFloat(row["Buying Total"]) || 0,
+  //           sellingPrice: parseFloat(row["Selling Price"]) || 0,
+  //           sellingTotal: parseFloat(row["Selling Total"]) || 0,
+  //           netProfit: parseFloat(row["Net Profit"]) || 0
+  //         };
+  //         currentOrder.products.push(product);
+          
+  //         // Update Order Totals
+  //         currentOrder.totalListingPrice += product.listingTotal;
+  //         currentOrder.totalBuyingPrice += product.buyingTotal;
+  //         currentOrder.totalSellingPrice += product.sellingTotal;
+  //         currentOrder.totalOrderProfit += product.netProfit;
+  //       }
+  //     });
+
+  //     // Push the last order in the loop
+  //     if (currentOrder) ordersToUpload.push(currentOrder);
+
+  //     // Send to Backend
+  //     try {
+  //       await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
+  //       alert(`Successfully imported ${ordersToUpload.length} orders!`);
+  //       fetchOrders(); // Refresh table
+  //     } catch (err) {
+  //       alert("Error during import. Check Excel format.");
+  //     }
+  //   };
+  //   reader.readAsArrayBuffer(file);
+  // };
+
+  // After Import
+// const handleImport = (e) => {
+//     const file = e.target.files[0];
+//     const reader = new FileReader();
+
+//     reader.onload = async (event) => {
+//       const data = new Uint8Array(event.target.result);
+//       const workbook = XLSX.read(data, { type: 'array' });
+//       const sheetName = workbook.SheetNames[0];
+//       const worksheet = workbook.Sheets[sheetName];
+      
+//       // CRITICAL: defval: "" prevents the columns from shifting left if a cell is empty
+//       const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+//       const formatDate = (val) => {
+//         if (!val || val === "") return "";
+//         if (val instanceof Date) return val.toISOString().split('T')[0];
+//         if (typeof val === 'number') {
+//           const date = new Date((val - 25569) * 86400 * 1000);
+//           return date.toISOString().split('T')[0];
+//         }
+//         return String(val);
+//       };
+
+//       const ordersToUpload = [];
+//       let currentOrder = null;
+
+//       // STARTING LOOP - Skipping the header (Row 0)
+//       for (let i = 1; i < rows.length; i++) {
+//         const row = rows[i];
+//         if (!row || row.length === 0) continue;
+
+//         const sNoTrigger = row[0]; // Col A: Orders
+        
+//         // Skip "Total" summary rows from Excel
+//         const isSummaryRow = String(row[0]).toLowerCase().includes("total") || 
+//                              String(row[7]).toLowerCase().includes("total") ||
+//                              String(row[8]).toLowerCase().includes("total");
+//         if (isSummaryRow) continue;
+
+//         // If Col A has a Serial Number, it's a NEW ORDER
+//         if (sNoTrigger !== "" && !isNaN(sNoTrigger)) {
+//           if (currentOrder) ordersToUpload.push(currentOrder);
+
+//           currentOrder = {
+//             orderId: "", // Kept blank as requested
+//             date: formatDate(row[2]), // Col C: Date
+//             platform: row[1] || "Amazon", // Col B: Marketplace
+//             platformAccount: row[3] || "", // Col D: Account
+//             cardUsed: "", 
+//             cashbackAmount: parseFloat(row[4]) || 0, // Col E: Cashback
+//             deliveryDate: formatDate(row[14]), // Col O: Delivery Date
+//             deliverySlot: row[15] || "7 - 10 PM", // Col P: Delivery Time
+//             products: [],
+//             totalListingPrice: 0,
+//             totalBuyingPrice: 0,
+//             totalSellingPrice: 0,
+//             totalOrderProfit: 0,
+//             isDelivered: false,
+//             paymentStatus: { isReceived: false, receivedDate: "", amountReceived: 0, paymentMethod: "" }
+//           };
+//         }
+
+//         // ADDING PRODUCT DATA (Indices verified from your image)
+//         // Col H (index 7) is Product Name
+//         if (currentOrder && row[7] !== "") { 
+//           const product = {
+//             productName: String(row[7]),       // Col H: Product
+//             listingPrice: parseFloat(row[5]) || 0, // Col F: Listed Price
+//             listingTotal: parseFloat(row[6]) || 0, // Col G: Total (Listing)
+//             buyingPrice: parseFloat(row[8]) || 0,  // Col I: Buying Price
+//             buyingTotal: parseFloat(row[9]) || 0,  // Col J: Total (Buying)
+//             qty: parseInt(row[10]) || 1,           // Col K: Quantity
+//             sellingPrice: parseFloat(row[11]) || 0, // Col L: Selling Price
+//             sellingTotal: parseFloat(row[12]) || 0, // Col M: Total (Selling)
+//             netProfit: parseFloat(row[13]) || 0    // Col N: Net Profit
+//           };
+
+//           currentOrder.products.push(product);
+          
+//           // Add up the grand totals for the order summary
+//           currentOrder.totalListingPrice += product.listingTotal;
+//           currentOrder.totalBuyingPrice += product.buyingTotal;
+//           currentOrder.totalSellingPrice += product.sellingTotal;
+//           currentOrder.totalOrderProfit += product.netProfit;
+//         }
+//       }
+
+//       if (currentOrder) ordersToUpload.push(currentOrder);
+
+//       try {
+//         await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
+//         alert(`Successfully imported ${ordersToUpload.length} orders!`);
+//         fetchOrders(); 
+//       } catch (err) {
+//         console.error(err);
+//         alert("Error: Check backend console.");
+//       }
+//     };
+//     reader.readAsArrayBuffer(file);
+//   };
+const handleImport = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = async (event) => {
+    try {
+      const data = new Uint8Array(event.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      // header: 1 reads as array of arrays. 
+      // defval: "" ensures empty cells don't cause columns to shift.
+      const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
+
+      const formatDate = (val) => {
+        if (!val || val === "") return "";
+        if (val instanceof Date) return val.toISOString().split('T')[0];
+        if (typeof val === 'number') {
+          // Convert Excel Serial Number to JS Date
+          const date = new Date((val - 25569) * 86400 * 1000);
+          return date.toISOString().split('T')[0];
+        }
+        return String(val);
+      };
+
+      const ordersToUpload = [];
+      let currentOrder = null;
+
+      // Start loop from index 1 (skipping the Excel Header Row)
+      for (let i = 1; i < rows.length; i++) {
+        const row = rows[i];
+        if (!row || row.length === 0) continue;
+
+        // Detect "Total" summary rows in the manual Excel and ignore them
+        const rowContent = row.join(" ").toLowerCase();
+        if (rowContent.includes("total")) continue;
+
+        const sNoTrigger = row[0]; // Column A (Index 0): Orders Serial Number
+
+        // LOGIC: If Column A has a Serial Number, it's the start of a NEW ORDER
+        if (sNoTrigger !== "" && !isNaN(sNoTrigger)) {
+          if (currentOrder) ordersToUpload.push(currentOrder);
+
+          currentOrder = {
+            orderId: "", // Blank as requested
+            date: formatDate(row[2]), // Column C: Date
+            platform: row[1] || "Amazon", // Column B: Marketplace
+            platformAccount: row[3] || "", // Column D: Account
+            cardUsed: "", // Not in manual sheet, keep blank
+            cashbackAmount: parseFloat(row[4]) || 0, // Column E: Cashback
+            deliveryDate: formatDate(row[14]), // Column O: Delivery Date
+            deliverySlot: row[15] || "7 - 10 PM", // Column P: Delivery Time
+            products: [],
+            totalListingPrice: 0,
+            totalBuyingPrice: 0,
+            totalSellingPrice: 0,
+            totalOrderProfit: 0,
+            isDelivered: false,
+            paymentStatus: {
+              isReceived: false,
+              receivedDate: "",
+              amountReceived: 0,
+              paymentMethod: ""
+            }
+          };
+        }
+
+        // ADDING PRODUCT DATA (Indices based on your image)
+        // Col H (Index 7) is Product Name
+        if (currentOrder && row[7] !== "") {
+          const buyTotal = parseFloat(row[9]) || 0;    // Column J: Buying Total
+          const sellTotal = parseFloat(row[12]) || 0;  // Column M: Selling Total
+          
+          // --- FIX: CALCULATE PROFIT MANUALLY TO AVOID BLANK EXCEL CELLS ---
+          const calculatedProfit = parseFloat((sellTotal - buyTotal).toFixed(2));
+
+          const product = {
+            productName: String(row[7]),           // Column H
+            listingPrice: parseFloat(row[5]) || 0, // Column F
+            listingTotal: parseFloat(row[6]) || 0, // Column G
+            buyingPrice: parseFloat(row[8]) || 0,  // Column I
+            buyingTotal: buyTotal,                 // Column J
+            qty: parseInt(row[10]) || 1,           // Column K
+            sellingPrice: parseFloat(row[11]) || 0, // Column L
+            sellingTotal: sellTotal,               // Column M
+            netProfit: calculatedProfit            // Calculated Value
+          };
+
+          currentOrder.products.push(product);
+
+          // Update the running totals for the entire Order
+          currentOrder.totalListingPrice += product.listingTotal;
+          currentOrder.totalBuyingPrice += product.buyingTotal;
+          currentOrder.totalSellingPrice += product.sellingTotal;
+          currentOrder.totalOrderProfit += calculatedProfit;
+        }
+      }
+
+      // Add the final order from the loop
+      if (currentOrder) ordersToUpload.push(currentOrder);
+
+      // Check if we actually found data
+      if (ordersToUpload.length === 0) {
+        alert("No valid orders found. Check if the Excel format matches the requirement.");
+        return;
+      }
+
+      // Send to Backend
+      // await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
+            await axios.post('/api/orders/bulk', ordersToUpload);
+      alert(`🎉 Success! ${ordersToUpload.length} orders imported with calculated profits.`);
+      fetchOrders(); // Refresh the list
+      
+    } catch (err) {
+      console.error("Import Error:", err);
+      alert("Failed to import. Check console for details.");
+    }
+  };
+
+  reader.readAsArrayBuffer(file);
+}; 
+  return (
+    <div className="container-fluid py-4">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3 className="fw-bold text-dark">Store Order Logs</h3>
+        {/* <Button variant="success" onClick={exportToExcel} className="shadow-sm">
+          <FileSpreadsheet className="me-2"/> Export to Excel
+        </Button> */}
+        <div className="d-flex gap-2">
+    {/* Hidden File Input */}
+    <input 
+      type="file" 
+      ref={fileInputRef} 
+      style={{ display: 'none' }} 
+      accept=".xlsx, .xls,.pdf" 
+      onChange={handleImport} 
+    />
+    
+    {/* Import Button */}
+    <Button variant="outline-primary" onClick={() => fileInputRef.current.click()}>
+      <Upload size={18} className="me-2" /> Import Data
+    </Button>
+
+    <Button variant="success" onClick={exportToExcel}>
+      <FileSpreadsheet className="me-2"/> Export to Excel
+    </Button>
+  </div>
+
+      </div>
+
+      <Card className="shadow-sm border-0">
+        <Table bordered hover responsive className="bg-white align-middle text-center mb-0" style={{ fontSize: '0.85rem' }}>
+          <thead className="table-dark">
+            <tr>
+                <th>#</th> {/* Serial Number Column */}
+              <th>Order/Account</th>
+              <th>Card/Cash</th>
+              <th>Listed Price</th>
+              <th className="table-info text-dark">Total</th>
+              <th>Product</th>
+              <th>Buying Price</th>
+              <th className="table-warning text-dark">Total</th>
+              <th>Qty</th>
+              <th>Selling Price</th>
+              <th className="table-primary text-dark">Total</th>
+              <th className="bg-success">Net Profit</th>
+              <th>Delivery / Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order,oIdx) => (
+              <React.Fragment key={order._id}>
+                {order.products.map((p, idx) => (
+                  <tr key={idx}>
+                    {/* Serial Number & Order Info merged */}
+                     {idx === 0 && (
+          <td rowSpan={order.products.length + 1} className="bg-light fw-bold border-end align-middle">
+            {oIdx + 1} {/* This is your Serial Number */}
+          </td>
+        )}
+                    {/* Common Order Header */}
+                    {idx === 0 && (
+                      <td rowSpan={order.products.length + 1} className="bg-light fw-bold border-end">
+                        <small className="text-muted d-block">#{order.orderId}</small>
+                        {order.date}<br/>
+                        <Badge bg="info" className="mt-1">{order.platformAccount}</Badge>
+                      </td>
+                    )}
+                    {idx === 0 && (
+                      <td rowSpan={order.products.length + 1} className="bg-light border-end">
+                        <small className="d-block">{order.cardUsed}</small>
+                        <Badge bg="warning" text="dark">₹{order.cashbackAmount}</Badge>
+                      </td>
+                    )}
+
+                    {/* Product Data Rows */}
+                    <td>₹{p.listingPrice}</td>
+                    <td className="fw-bold">₹{p.listingTotal}</td>
+                    <td className="text-start fw-bold">{p.productName}</td>
+                    <td>₹{p.buyingPrice}</td>
+                    <td className="fw-bold">₹{p.buyingTotal}</td>
+                    <td>{p.qty}</td>
+                    <td>₹{p.sellingPrice}</td>
+                    <td className="fw-bold">₹{p.sellingTotal}</td>
+                    <td className="text-success fw-bold">₹{p.netProfit}</td>
+
+                    {/* Delivery & Actions Header */}
+                    {idx === 0 && (
+                      <td rowSpan={order.products.length + 1} className="border-start">
+                        <div className="mb-2">
+                           <Button variant={order.isDelivered ? "success" : "outline-warning"} size="sm" onClick={() => toggleDelivery(order._id)} className="w-100 mb-1">
+                             {order.isDelivered ? <><PackageCheck size={14}/> Deliv.</> : <><Truck size={14}/> Pend.</>}
+                           </Button>
+                           <small className="d-block text-muted">{order.deliveryDate}</small>
+                        </div>
+                        <hr className="my-1"/>
+                        <div className="mb-2" style={{ cursor: 'pointer' }} onClick={() => handlePayClick(order)}>
+                           {order.paymentStatus.isReceived ? 
+                             <div className="text-success"><CheckCircle size={18}/><br/><small>Paid</small></div> : 
+                             <div className="text-danger"><XCircle size={18}/><br/><small>Unpaid</small></div>}
+                        </div>
+                        <hr className="my-1"/>
+                        <Button variant="outline-primary" size="sm" onClick={() => navigate(`/edit-order/${order._id}`)} className="w-100">
+                          <Edit3 size={14}/> Edit
+                        </Button>
+                        {/* --- DELETE BUTTON --- */}
+                            <Button variant="outline-danger" size="sm" onClick={() => handleDelete(order._id, order.orderId)}>
+                              <Trash2 size={14}/>
+                            </Button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+                
+                {/* --- SUMMARY TOTALS ROW (Matches your Excel Image) --- */}
+                <tr className="table-secondary fw-bold" style={{ borderTop: '2px solid #dee2e6' }}>
+                  <td colSpan="1">Total</td>
+                  <td>₹{order.totalListingPrice}</td>
+                  <td colSpan="2"></td>
+                  <td>₹{order.totalBuyingPrice}</td>
+                  <td></td>
+                  <td></td>
+                  <td>₹{order.totalSellingPrice}</td>
+                  <td className="text-success" style={{ backgroundColor: '#e6fffa' }}>₹{order.totalOrderProfit}</td>
+                </tr>
+              </React.Fragment>
+            ))}
+
+            {/* --- FINAL GRAND TOTAL ROW AT THE BOTTOM OF UI --- */}
+<tr className="table-dark fw-bold border-top border-4 shadow-lg">
+  {/* Span the first 3 columns: #, Order/Account, and Card/Cash */}
+  <td colSpan="3" className="text-end text-uppercase py-3" style={{ letterSpacing: '1px' }}>
+    <span className="text-warning">Grand Totals (All Orders):</span>
+  </td>
+  
+  {/* Listing Price Column */}
+  <td></td> 
+  {/* Listing Total Column */}
+  <td className="text-info fs-5">₹{grandListingTotal.toLocaleString()}</td>
+  
+  {/* Product Column */}
+  <td></td>
+  
+  {/* Buying Price Column */}
+  <td></td>
+  {/* Buying Total Column */}
+  <td className="text-warning fs-5">₹{grandBuyingTotal.toLocaleString()}</td>
+  
+  {/* Qty Column */}
+  <td></td>
+  
+  {/* Selling Price Column */}
+  <td></td>
+  {/* Selling Total Column */}
+  <td className="text-primary fs-5">₹{grandSellingTotal.toLocaleString()}</td>
+  
+  {/* Net Profit Column */}
+  <td className="bg-success fs-5 text-white shadow-sm">
+    ₹{grandNetProfit.toLocaleString()}
+  </td>
+  
+  {/* Delivery/Actions Column */}
+  <td></td>
+</tr>          
+          </tbody>
+        </Table>
+      </Card>
+
+      {/* Payment Modal */}
+      <Modal show={showPayModal} onHide={() => setShowPayModal(false)} centered>
+  <Modal.Header closeButton className="bg-primary text-white">
+    <Modal.Title>Receive Payment Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <Form>
+      {/* Amount Field */}
+      <Form.Group className="mb-3">
+        <Form.Label className="fw-bold">Amount Received (₹)</Form.Label>
+        <Form.Control 
+          type="number" 
+          value={payData.amountReceived} 
+          onChange={e => setPayData({...payData, amountReceived: e.target.value})}
+          placeholder="Enter amount"
+        />
+      </Form.Group>
+
+      {/* Date Field */}
+      <Form.Group className="mb-3">
+        <Form.Label className="fw-bold">Received Date</Form.Label>
+        <Form.Control 
+          type="date" 
+          value={payData.receivedDate} 
+          onChange={e => setPayData({...payData, receivedDate: e.target.value})}
+        />
+      </Form.Group>
+
+      {/* --- ADDED PAYMENT METHOD DROPDOWN --- */}
+      <Form.Group className="mb-3">
+        <Form.Label className="fw-bold">Payment Method</Form.Label>
+        <Form.Select 
+          value={payData.paymentMethod} 
+          onChange={e => setPayData({...payData, paymentMethod: e.target.value})}
+        >
+          <option value="UPI">UPI / GPay / PhonePe</option>
+          <option value="Cash">Cash</option>
+          <option value="Bank Transfer">Bank Transfer</option>
+          <option value="Card">Card</option>
+        </Form.Select>
+      </Form.Group>
+    </Form>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={() => setShowPayModal(false)}>Cancel</Button>
+    <Button variant="primary" onClick={submitPayment} className="px-4 fw-bold">
+      Confirm Received
+    </Button>
+  </Modal.Footer>
+</Modal>
+    </div>
+  );
+};
+
+export default OrderLogs;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\OrderLogs1.jsx
+========================================
+
+// import React, { useState, useEffect } from 'react';
+// import { Table, Button, Modal, Form, Badge } from 'react-bootstrap';
+// import { CheckCircle, XCircle, FileSpreadsheet, Loader } from 'lucide-react';
+// import axios from 'axios';
+// import * as XLSX from 'xlsx';
+
+// const OrderLogs = () => {
+//   const [orders, setOrders] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   // Modal State
+//   const [showPaymentModal, setShowPaymentModal] = useState(false);
+//   const [selectedOrder, setSelectedOrder] = useState(null);
+//   const [paymentDetails, setPaymentDetails] = useState({
+//     receivedDate: new Date().toISOString().split('T')[0],
+//     amountReceived: 0,
+//     paymentMethod: 'UPI'
+//   });
+
+//   useEffect(() => {
+//     fetchOrders();
+//   }, []);
+
+//   const fetchOrders = async () => {
+//     try {
+//       const res = await axios.get('http://localhost:5000/api/orders');
+//       setOrders(res.data);
+//       setLoading(false);
+//     } catch (err) {
+//       console.error("Error fetching orders", err);
+//       setLoading(false);
+//     }
+//   };
+
+//   // Open modal for a specific order
+//   const handlePaymentClick = (order) => {
+//     setSelectedOrder(order);
+//     setShowPaymentModal(true);
+//   };
+
+//   // Submit payment update to backend
+//   const submitPayment = async () => {
+//     try {
+//       const updatedData = {
+//         isReceived: true,
+//         ...paymentDetails
+//       };
+//       await axios.patch(`http://localhost:5000/api/orders/${selectedOrder._id}/payment`, updatedData);
+//       alert("Payment status updated!");
+//       setShowPaymentModal(false);
+//       fetchOrders(); // Refresh table
+//     } catch (err) {
+//       alert("Failed to update payment");
+//     }
+//   };
+
+//   // --- EXCEL EXPORT LOGIC ---
+//   const exportToExcel = () => {
+//     const flatData = [];
+    
+//     orders.forEach(order => {
+//       order.products.forEach((prod, index) => {
+//         flatData.push({
+//           "Order ID": index === 0 ? order.orderId : "", // Merged look
+//           "Date": index === 0 ? order.date : "",
+//           "Platform": index === 0 ? order.platform : "",
+//           "Account": index === 0 ? order.platformAccount : "",
+//           "Product": prod.productName,
+//           "Qty": prod.qty,
+//           "Buying Price": prod.buyingPrice,
+//           "Selling Price": prod.sellingPrice,
+//           "Net Profit": prod.netProfit,
+//           "Payment Status": order.paymentStatus.isReceived ? "PAID" : "PENDING",
+//           "Payment Date": order.paymentStatus.receivedDate
+//         });
+//       });
+//     });
+
+//     const ws = XLSX.utils.json_to_sheet(flatData);
+//     const wb = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(wb, ws, "Orders");
+//     XLSX.writeFile(wb, `Order_Logs_${new Date().toLocaleDateString()}.xlsx`);
+//   };
+
+//   if (loading) return <div className="p-5 text-center"><Loader className="spinner" /> Loading Logs...</div>;
+
+//   return (
+//     <div className="container-fluid">
+//       <div className="d-flex justify-content-between align-items-center mb-4">
+//         <h3>Order Logs</h3>
+//         <Button variant="outline-success" onClick={exportToExcel}>
+//           <FileSpreadsheet size={18} className="me-2" /> Export to Excel
+//         </Button>
+//       </div>
+
+//       <Table bordered hover responsive className="shadow-sm bg-white">
+//         <thead className="table-dark">
+//           <tr>
+//             <th>Order Info</th>
+//             <th>Product Details</th>
+//             <th>Pricing & Profit</th>
+//             <th>Delivery</th>
+//             <th>Paid?</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           {orders.map((order) => (
+//             <React.Fragment key={order._id}>
+//               {/* We loop through products and group them under one Order row visually */}
+//               {order.products.map((prod, pIndex) => (
+//                 <tr key={`${order._id}-${pIndex}`}>
+//                   {/* Show Order Header details only on the first product row */}
+//                   {pIndex === 0 ? (
+//                     <td rowSpan={order.products.length} className="bg-light align-middle">
+//                       <strong>ID: {order.orderId}</strong><br/>
+//                       <small>{order.date}</small><br/>
+//                       <Badge bg="info">{order.platformAccount}</Badge>
+//                     </td>
+//                   ) : null}
+                  
+//                   <td>{prod.productName} (x{prod.qty})</td>
+//                   <td>
+//                     <small>Buy: {prod.buyingPrice} | Sell: {prod.sellingPrice}</small><br/>
+//                     <strong className="text-success">Profit: ₹{prod.netProfit}</strong>
+//                   </td>
+
+//                   {pIndex === 0 ? (
+//                     <td rowSpan={order.products.length} className="align-middle">
+//                       <small>{order.deliveryDate}</small><br/>
+//                       <small className="text-muted">{order.deliverySlot}</small>
+//                     </td>
+//                   ) : null}
+
+//                   {pIndex === 0 ? (
+//                     <td rowSpan={order.products.length} className="align-middle text-center" style={{backgroundColor: order.paymentStatus.isReceived ? '#d4edda' : '#fff3cd'}}>
+//                       {order.paymentStatus.isReceived ? (
+//                         <div className="text-success">
+//                           <CheckCircle size={24} /><br/>
+//                           <small>Paid on {order.paymentStatus.receivedDate}</small>
+//                         </div>
+//                       ) : (
+//                         <Button variant="link" className="text-danger p-0" onClick={() => handlePaymentClick(order)}>
+//                           <XCircle size={24} /><br/>
+//                           <small>Mark Paid</small>
+//                         </Button>
+//                       )}
+//                     </td>
+//                   ) : null}
+//                 </tr>
+//               ))}
+//               {/* Optional: Summary row for Total Order Profit */}
+//               <tr className="table-secondary">
+//                 <td colSpan="2" className="text-end font-weight-bold">Order Total Profit:</td>
+//                 <td colSpan="3"><strong>₹{order.totalOrderProfit}</strong></td>
+//               </tr>
+//             </React.Fragment>
+//           ))}
+//         </tbody>
+//       </Table>
+
+//       {/* --- PAYMENT MODAL --- */}
+//       <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)} centered>
+//         <Modal.Header closeButton>
+//           <Modal.Title>Receive Payment Details</Modal.Title>
+//         </Modal.Header>
+//         <Modal.Body>
+//           <Form>
+//             <Form.Group className="mb-3">
+//               <Form.Label>Amount Received (₹)</Form.Label>
+//               <Form.Control 
+//                 type="number" 
+//                 onChange={(e) => setPaymentDetails({...paymentDetails, amountReceived: e.target.value})}
+//               />
+//             </Form.Group>
+//             <Form.Group className="mb-3">
+//               <Form.Label>Received Date</Form.Label>
+//               <Form.Control 
+//                 type="date" 
+//                 value={paymentDetails.receivedDate}
+//                 onChange={(e) => setPaymentDetails({...paymentDetails, receivedDate: e.target.value})}
+//               />
+//             </Form.Group>
+//             <Form.Group className="mb-3">
+//               <Form.Label>Payment Method</Form.Label>
+//               <Form.Select onChange={(e) => setPaymentDetails({...paymentDetails, paymentMethod: e.target.value})}>
+//                 <option>UPI / GPay</option>
+//                 <option>Cash</option>
+//                 <option>Bank Transfer</option>
+//               </Form.Select>
+//             </Form.Group>
+//           </Form>
+//         </Modal.Body>
+//         <Modal.Footer>
+//           <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>Cancel</Button>
+//           <Button variant="primary" onClick={submitPayment}>Confirm Payment</Button>
+//         </Modal.Footer>
+//       </Modal>
+//     </div>
+//   );
+// };
+
+// export default OrderLogs;
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Modal, Form, Badge, Card } from 'react-bootstrap';
+import { 
+  CheckCircle, 
+  XCircle, 
+  FileSpreadsheet, 
+  Loader, 
+  Truck, 
+  Edit3, 
+  PackageCheck 
+} from 'lucide-react';
+import axios from 'axios';
+import * as XLSX from 'xlsx';
+import { useNavigate } from 'react-router-dom';
+
+const OrderLogs = () => {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Payment Modal State
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [paymentDetails, setPaymentDetails] = useState({
+    receivedDate: new Date().toISOString().split('T')[0],
+    amountReceived: 0,
+    paymentMethod: 'UPI'
+  });
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/orders');
+      setOrders(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error("Error fetching orders", err);
+      setLoading(false);
+    }
+  };
+
+  // 1. Toggle Delivery Status
+  const toggleDelivery = async (id) => {
+    try {
+      await axios.patch(`http://localhost:5000/api/orders/${id}/delivery`);
+      fetchOrders(); // Refresh data
+    } catch (err) {
+      alert("Error updating delivery status");
+    }
+  };
+
+  // 2. Payment Modal Logic
+  const handlePaymentClick = (order) => {
+    setSelectedOrder(order);
+    setPaymentDetails({ ...paymentDetails, amountReceived: order.totalOrderProfit }); // Pre-fill with profit or custom amount
+    setShowPaymentModal(true);
+  };
+
+  const submitPayment = async () => {
+    try {
+      const updatedData = { isReceived: true, ...paymentDetails };
+      await axios.patch(`http://localhost:5000/api/orders/${selectedOrder._id}/payment`, updatedData);
+      setShowPaymentModal(false);
+      fetchOrders();
+    } catch (err) {
+      alert("Failed to update payment");
+    }
+  };
+
+  // 3. Updated Excel Export Logic
+  const exportToExcel = () => {
+    const flatData = [];
+    orders.forEach(order => {
+      order.products.forEach((prod, index) => {
+        flatData.push({
+          "Order ID": index === 0 ? order.orderId : "",
+          "Order Date": index === 0 ? order.date : "",
+          "Platform": index === 0 ? order.platform : "",
+          "Account": index === 0 ? order.platformAccount : "",
+          "Product Name": prod.productName,
+          "Quantity": prod.qty,
+          "Buying Price": prod.buyingPrice,
+          "Selling Price": prod.sellingPrice,
+          "Net Profit": prod.netProfit,
+          "Delivery Date": index === 0 ? order.deliveryDate : "",
+          "Delivery Slot": index === 0 ? order.deliverySlot : "",
+          "Delivery Status": index === 0 ? (order.isDelivered ? "DELIVERED" : "PENDING") : "",
+          "Payment Received?": order.paymentStatus.isReceived ? "YES" : "NO",
+          "Payment Date": order.paymentStatus.isReceived ? order.paymentStatus.receivedDate : "N/A",
+          "Payment Method": order.paymentStatus.isReceived ? order.paymentStatus.paymentMethod : ""
+        });
+      });
+    });
+
+    const ws = XLSX.utils.json_to_sheet(flatData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Order Details");
+    XLSX.writeFile(wb, `Store_Orders_${new Date().toISOString().split('T')[0]}.xlsx`);
+  };
+
+  if (loading) return <div className="p-5 text-center"><Loader className="spinner-border text-primary" /> <p>Loading Orders...</p></div>;
+
+  return (
+    <div className="container-fluid">
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3><ClipboardList className="me-2" /> Order Logs</h3>
+        <Button variant="success" onClick={exportToExcel}>
+          <FileSpreadsheet size={20} className="me-2" /> Export to Excel
+        </Button>
+      </div>
+
+      <Card className="shadow-sm border-0">
+        <Table responsive bordered hover className="mb-0 align-middle">
+          <thead className="table-dark">
+            <tr>
+              <th style={{ width: '150px' }}>Order Info</th>
+              <th>Product Details</th>
+              <th>Pricing / Profit</th>
+              <th>Delivery Info</th>
+              <th className="text-center">Status</th>
+              <th className="text-center">Payment</th>
+              <th className="text-center">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((order) => (
+              <React.Fragment key={order._id}>
+                {order.products.map((prod, pIndex) => (
+                  <tr key={`${order._id}-${pIndex}`}>
+                    {/* Header Info (Merged) */}
+                    {pIndex === 0 && (
+                      <td rowSpan={order.products.length} className="bg-light fw-bold">
+                        <small className="text-muted d-block">ID: {order.orderId}</small>
+                        <span className="d-block">{order.date}</span>
+                        <Badge bg="info" className="mt-1">{order.platformAccount}</Badge>
+                      </td>
+                    )}
+
+                    {/* Product Info */}
+                    <td>
+                      {prod.productName} 
+                      <Badge bg="secondary" pill className="ms-2">x{prod.qty}</Badge>
+                    </td>
+
+                    {/* Profit Info */}
+                    <td>
+                      <div className="small">Buy: ₹{prod.buyingPrice}</div>
+                      <div className="small">Sell: ₹{prod.sellingPrice}</div>
+                      <div className="fw-bold text-success">Profit: ₹{prod.netProfit}</div>
+                    </td>
+
+                    {/* Delivery Info (Merged) */}
+                    {pIndex === 0 && (
+                      <td rowSpan={order.products.length} className="small">
+                        <div className="fw-bold text-primary">{order.deliveryDate || 'Not set'}</div>
+                        <div className="text-muted">{order.deliverySlot}</div>
+                      </td>
+                    )}
+
+                    {/* Delivery Status Toggle (Merged) */}
+                    {pIndex === 0 && (
+                      <td rowSpan={order.products.length} className="text-center">
+                        <Button 
+                          variant={order.isDelivered ? "success" : "outline-warning"} 
+                          size="sm"
+                          onClick={() => toggleDelivery(order._id)}
+                          className="d-flex align-items-center gap-1 mx-auto"
+                        >
+                          {order.isDelivered ? <PackageCheck size={16}/> : <Truck size={16}/>}
+                          {order.isDelivered ? "Delivered" : "Mark Deliv."}
+                        </Button>
+                      </td>
+                    )}
+
+                    {/* Payment Status (Merged) */}
+                    {pIndex === 0 && (
+                      <td rowSpan={order.products.length} 
+                          className="text-center" 
+                          style={{ backgroundColor: order.paymentStatus.isReceived ? '#e8f5e9' : '#fff8e1' }}>
+                        {order.paymentStatus.isReceived ? (
+                          <div className="text-success fw-bold">
+                            <CheckCircle size={20} /><br/>
+                            <small>Paid {order.paymentStatus.receivedDate}</small>
+                          </div>
+                        ) : (
+                          <Button variant="link" className="text-danger p-0 text-decoration-none" onClick={() => handlePaymentClick(order)}>
+                            <XCircle size={20} /><br/>
+                            <small>Unpaid</small>
+                          </Button>
+                        )}
+                      </td>
+                    )}
+
+                    {/* Actions (Merged) */}
+                    {pIndex === 0 && (
+                      <td rowSpan={order.products.length} className="text-center">
+                        <Button 
+                          variant="outline-primary" 
+                          size="sm" 
+                          onClick={() => navigate(`/edit-order/${order._id}`)}
+                        >
+                          <Edit3 size={16} /> Edit
+                        </Button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
+                {/* Total Row for the Order */}
+                <tr className="table-secondary">
+                  <td colSpan="2" className="text-end small">Order Total Profit:</td>
+                  <td colSpan="5" className="fw-bold text-success">₹{order.totalOrderProfit}</td>
+                </tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </Table>
+      </Card>
+
+      {/* --- PAYMENT MODAL --- */}
+      <Modal show={showPaymentModal} onHide={() => setShowPaymentModal(false)} centered>
+        <Modal.Header closeButton className="bg-primary text-white">
+          <Modal.Title>Update Payment Details</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Amount Received (₹)</Form.Label>
+              <Form.Control 
+                type="number" 
+                value={paymentDetails.amountReceived}
+                onChange={(e) => setPaymentDetails({...paymentDetails, amountReceived: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Received Date</Form.Label>
+              <Form.Control 
+                type="date" 
+                value={paymentDetails.receivedDate}
+                onChange={(e) => setPaymentDetails({...paymentDetails, receivedDate: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Payment Method</Form.Label>
+              <Form.Select 
+                value={paymentDetails.paymentMethod}
+                onChange={(e) => setPaymentDetails({...paymentDetails, paymentMethod: e.target.value})}
+              >
+                <option>UPI / GPay</option>
+                <option>Cash</option>
+                <option>Bank Transfer</option>
+              </Form.Select>
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>Close</Button>
+          <Button variant="primary" onClick={submitPayment}>Confirm Received</Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
+
+import { ClipboardList } from 'lucide-react'; 
+export default OrderLogs;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\src\pages\PaymentLogs.jsx
+========================================
+
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Table, Badge } from 'react-bootstrap';
+import { Wallet, Landmark, Hourglass, TrendingUp } from 'lucide-react';
+import axios from 'axios';
+
+const PaymentLogs = () => {
+  const [stats, setStats] = useState({
+    totalInvested: 0,
+    totalReceived: 0,
+    pendingBalance: 0,
+    totalProfit: 0
+  });
+  const [paidOrders, setPaidOrders] = useState([]);
+
+  useEffect(() => {
+    fetchPaymentStats();
+  }, []);
+
+  const fetchPaymentStats = async () => {
+    try {
+      const res = await axios.get('http://localhost:5000/api/orders');
+      const allOrders = res.data;
+
+      let invested = 0;
+      let received = 0;
+      let profit = 0;
+
+      allOrders.forEach(order => {
+        // Calculate total buying price for this order (Investment)
+        const orderInvestment = order.products.reduce((acc, p) => acc + (p.buyingPrice * p.qty), 0);
+        invested += orderInvestment;
+
+        // Total Profit
+        profit += order.totalOrderProfit;
+
+        // If paid, add to received amount
+        if (order.paymentStatus.isReceived) {
+          received += order.paymentStatus.amountReceived;
+        }
+      });
+
+      setStats({
+        totalInvested: invested.toFixed(2),
+        totalReceived: received.toFixed(2),
+        pendingBalance: (invested - received).toFixed(2),
+        totalProfit: profit.toFixed(2)
+      });
+
+      // Filter only orders that are marked as paid for the transaction list
+      setPaidOrders(allOrders.filter(o => o.paymentStatus.isReceived));
+
+    } catch (err) {
+      console.error("Error fetching payment stats", err);
+    }
+  };
+
+  return (
+    <div className="container-fluid">
+      <h3 className="mb-4">Financial Summary</h3>
+
+      {/* --- STATS CARDS --- */}
+      <Row className="g-4 mb-5">
+        <Col md={3}>
+          <Card className="border-0 shadow-sm bg-primary text-white">
+            <Card.Body className="d-flex align-items-center">
+              <div className="p-3 bg-white bg-opacity-25 rounded-circle me-3">
+                <Wallet size={30} />
+              </div>
+              <div>
+                <small className="opacity-75">Total Invested (Cards)</small>
+                <h4 className="mb-0">₹{stats.totalInvested}</h4>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={3}>
+          <Card className="border-0 shadow-sm bg-success text-white">
+            <Card.Body className="d-flex align-items-center">
+              <div className="p-3 bg-white bg-opacity-25 rounded-circle me-3">
+                <Landmark size={30} />
+              </div>
+              <div>
+                <small className="opacity-75">Received</small>
+                <h4 className="mb-0">₹{stats.totalReceived}</h4>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={3}>
+          <Card className="border-0 shadow-sm bg-warning text-dark">
+            <Card.Body className="d-flex align-items-center">
+              <div className="p-3 bg-dark bg-opacity-10 rounded-circle me-3">
+                <Hourglass size={30} />
+              </div>
+              <div>
+                <small className="opacity-75">Pending Balance</small>
+                <h4 className="mb-0">₹{stats.pendingBalance}</h4>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={3}>
+          <Card className="border-0 shadow-sm bg-dark text-white">
+            <Card.Body className="d-flex align-items-center">
+              <div className="p-3 bg-white bg-opacity-25 rounded-circle me-3">
+                <TrendingUp size={30} />
+              </div>
+              <div>
+                <small className="opacity-75">Net Profit</small>
+                <h4 className="mb-0 text-info">₹{stats.totalProfit}</h4>
+              </div>
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+
+      {/* --- RECENT TRANSACTIONS TABLE --- */}
+      <h5 className="mb-3">Recent Received Payments</h5>
+      <Card className="shadow-sm">
+        <Table responsive hover className="mb-0">
+          <thead className="table-light">
+            <tr>
+              <th>Received Date</th>
+              <th>Order ID</th>
+              <th>Method</th>
+              <th className="text-end">Amount Received</th>
+            </tr>
+          </thead>
+          <tbody>
+            {paidOrders.length > 0 ? (
+              paidOrders.map((order) => (
+                <tr key={order._id}>
+                  <td>{order.paymentStatus.receivedDate}</td>
+                  <td>{order.orderId}</td>
+                  <td><Badge bg="secondary">{order.paymentStatus.paymentMethod}</Badge></td>
+                  <td className="text-end fw-bold text-success">₹{order.paymentStatus.amountReceived}</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan="4" className="text-center py-4 text-muted">No payment records found.</td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </Card>
+    </div>
+  );
+};
+
+export default PaymentLogs;
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\vercel.json
+========================================
+
+{
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\client\vite.config.js
+========================================
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\server\models\Order.js
+========================================
+
+const mongoose = require('mongoose');
+
+const OrderSchema = new mongoose.Schema({
+    orderId: String,
+    date: String,
+    platform: String,
+    platformAccount: String,
+    cardUsed: String,
+    cashbackAmount: { type: Number, default: 0 },
+    
+    totalListingPrice: Number,
+    totalBuyingPrice: Number,
+    totalSellingPrice: Number,
+    totalOrderProfit: Number,
+
+    products: [{
+        productName: String,
+        qty: Number,
+        listingPrice: Number,
+        listingTotal: Number,
+        buyingPrice: Number,
+        buyingTotal: Number,
+        sellingPrice: Number,
+        sellingTotal: Number,
+        netProfit: Number
+    }],
+    deliveryDate: String,
+    deliverySlot: String,
+    isDelivered: { type: Boolean, default: false },
+    paymentStatus: {
+        isReceived: { type: Boolean, default: false },
+        receivedDate: String,
+        amountReceived: Number,
+        paymentMethod: String
+    }
+}, { timestamps: true });
+
+// MAKE SURE THIS LINE IS EXACTLY LIKE THIS:
+module.exports = mongoose.model('Order', OrderSchema);
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\server\models\Order1.js
+========================================
+
+// const mongoose = require('mongoose'); 
+// const OrderSchema = new mongoose.Schema({
+//   // Order Header (Only 1 per order)
+//   orderId: String,
+//   date: Date,
+//   time: String,
+//   platform: String,
+//   platformAccount: String,
+//   cardUsed: String,
+//   cashback: Number,
+  
+//   // Delivery Details
+//   deliveryDate: Date,
+//   deliverySlot: String,
+
+//   // Products (Multiple rows)
+//   products: [{
+//     productName: String,
+//     qty: Number,
+//     listingPrice: Number,
+//     buyingPrice: Number,
+//     sellingPrice: Number,
+//     netProfit: Number // (Selling - Buying) * Qty
+//   }],
+
+//   // Payment Tracking
+//   paymentStatus: {
+//     isReceived: { type: Boolean, default: false },
+//     receivedDate: Date,
+//     amountReceived: Number,
+//     paymentMethod: String
+//   },
+  
+//   totalOrderProfit: Number
+// }, { timestamps: true });
+const mongoose = require('mongoose');
+
+const OrderSchema = new mongoose.Schema({
+  orderId: { type: String, required: true },
+  date: { type: String, required: true }, // Store as "YYYY-MM-DD"
+  time: { type: String },
+  platform: { type: String, default: "Amazon" },
+  platformAccount: { type: String },
+  cardUsed: { type: String },
+  cashback: { type: Number, default: 0 },
+  
+  deliveryDate: { type: String },
+  deliverySlot: { type: String },
+  isDelivered: { type: Boolean, default: false },
+
+//   products: [{
+//     productName: { type: String, required: true },
+//     qty: { type: Number, default: 1 },
+//     listingPrice: { type: Number, default: 0 },
+//     buyingPrice: { type: Number, default: 0 },
+//     sellingPrice: { type: Number, default: 0 },
+//     netProfit: { type: Number, default: 0 }
+//   }],
+products: [{
+    productName: { type: String, required: true },
+    qty: { type: Number, default: 1 },
+    listingPrice: { type: Number, default: 0 },
+    listingTotal: { type: Number, default: 0 }, // New: Price * Qty
+    cashback: { type: Number, default: 0 },     // New: Product-specific discount/cashback
+    buyingPrice: { type: Number, default: 0 },
+    buyingTotal: { type: Number, default: 0 },  // New: Price * Qty
+    sellingPrice: { type: Number, default: 0 },
+    sellingTotal: { type: Number, default: 0 }, // New: Price * Qty
+    netProfit: { type: Number, default: 0 }
+}],
+
+  paymentStatus: {
+    isReceived: { type: Boolean, default: false },
+    receivedDate: { type: String, default: "" },
+    amountReceived: { type: Number, default: 0 },
+    paymentMethod: { type: String, default: "" }
+  },
+  
+  totalOrderProfit: { type: Number, default: 0 }
+}, { timestamps: true });
+
+module.exports = mongoose.model('Order', OrderSchema);
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\server\package.json
+========================================
+
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  "start": "node server.js",
+  "dev": "nodemon server.js",
+  "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "mongoose": "^9.1.5",
+    "nodemon": "^3.1.11"
+  }
+}
+
+
+========================================
+File Path: C:\Users\Nikhil Karwa\OneDrive\Desktop\store-manager\server\server.js
+========================================
+
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
+const Order = require('./models/Order'); // Import the model
+
+dotenv.config();
+const app = express();
+const allowedOrigins = [
+  process.env.FRONTEND_URL, // Your Vercel URL
+  'http://localhost:5173'   // Keep local for testing
+];
+
+// Middleware
+app.use(cors({
+  origin: "*", // For now, use "*" to test if it works. Later you can restrict it to your Vercel URL.
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  credentials: true
+}));
+// app.use(express.json()); // Allows the server to understand JSON data sent from React
+// Increase the limit to 50mb (or more if needed)
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("✅ Connected to MongoDB"))
+    .catch((err) => console.log("❌ MongoDB Connection Error:", err));
+
+// --- API ROUTES ---
+
+// 1. Test Route
+app.get('/', (req, res) => {
+    res.send("Store Management API is running...");
+});
+
+// 2. Add New Order (Create)
+// app.post('/api/orders', async (req, res) => {
+//     try {
+//         const newOrder = new Order(req.body);
+//         const savedOrder = await newOrder.save();
+//         res.status(201).json(savedOrder);
+//     } catch (error) {
+//         res.status(400).json({ message: error.message });
+//     }
+// });
+app.post('/api/orders', async (req, res) => {
+    try {
+        console.log("Data Received:", req.body);
+        
+        // This is where the error happens. 
+        // If the import above is wrong, Order will be undefined.
+        const newOrder = new Order(req.body); 
+        
+        const savedOrder = await newOrder.save();
+        res.status(201).json(savedOrder);
+    } catch (error) {
+        console.error("Save Error:", error);
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// 3. Get All Orders (Read)
+// app.get('/api/orders', async (req, res) => {
+//     try {
+//         const orders = await Order.find().sort({ createdAt: -1 });
+//         res.json(orders);
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// });
+app.get('/api/orders', async (req, res) => {
+    try {
+        // Change -1 to 1
+        const orders = await Order.find().sort({ createdAt: 1 }); 
+        res.json(orders);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// 4. Update Payment Status (Update)
+app.patch('/api/orders/:id/payment', async (req, res) => {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.id, 
+            { paymentStatus: req.body }, 
+            { new: true }
+        );
+        res.json(updatedOrder);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+// 1. Update the entire order (for Editing typos)
+app.put('/api/orders/:id', async (req, res) => {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(updatedOrder);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+// 2. Toggle Delivery Status only
+app.patch('/api/orders/:id/delivery', async (req, res) => {
+    try {
+        const order = await Order.findById(req.params.id);
+        order.isDelivered = !order.isDelivered; // Toggle between true/false
+        await order.save();
+        res.json(order);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+// server/server.js
+app.put('/api/orders/:id', async (req, res) => {
+    try {
+        const updatedOrder = await Order.findByIdAndUpdate(
+            req.params.id, 
+            req.body, 
+            { new: true } // This returns the updated version of the document
+        );
+        res.json(updatedOrder);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+// DELETE an order by ID
+app.delete('/api/orders/:id', async (req, res) => {
+    try {
+        await Order.findByIdAndDelete(req.params.id);
+        res.json({ message: "Order deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+// Bulk Import Orders
+app.post('/api/orders/bulk', async (req, res) => {
+    try {
+        // insertMany is much faster for large excel files
+        const savedOrders = await Order.insertMany(req.body);
+        res.status(201).json(savedOrders);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+// Start Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT,'0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+});
