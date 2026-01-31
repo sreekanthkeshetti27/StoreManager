@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Row, Col, Table, Badge } from 'react-bootstrap';
 import { Wallet, Landmark, Hourglass, TrendingUp } from 'lucide-react';
-import axios from 'axios';
+// import axios from 'axios';
+import api from '../api';
+
 
 const PaymentLogs = () => {
   const [stats, setStats] = useState({
@@ -18,7 +20,11 @@ const PaymentLogs = () => {
 
   const fetchPaymentStats = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/orders');
+            // const res = await axios.get('http://localhost:5000/api/orders');
+
+      // const res = await axios.get('/api/orders');
+             const res = await api.get('/api/orders');
+
       const allOrders = res.data;
 
       let invested = 0;

@@ -155,7 +155,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Badge, Card, Modal, Form } from 'react-bootstrap';
 import { FileSpreadsheet, Truck, Edit3, CheckCircle, XCircle, PackageCheck ,Trash2} from 'lucide-react';
-import axios from 'axios';
+// import axios from 'axios';
 import * as XLSX from 'xlsx';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
@@ -186,14 +186,14 @@ const grandNetProfit = orders.reduce((acc, order) => acc + parseFloat(order.tota
 
   useEffect(() => { fetchOrders(); }, []);
   // const fetchOrders = async () => { const res = await axios.get('http://localhost:5000/api/orders'); setOrders(res.data); };
-    const fetchOrders = async () => { const res = await axios.get('/api/orders'); setOrders(res.data); };
+    const fetchOrders = async () => { const res = await api.get('/api/orders'); setOrders(res.data); };
 
 
   const toggleDelivery = async (id) => { 
     try {
               // await axios.patch(`http://localhost:5000/api/orders/${id}/delivery`); 
 
-        await axios.patch(`/api/orders/${id}/delivery`); 
+        await api.patch(`/api/orders/${id}/delivery`); 
         fetchOrders(); 
     } catch(err) { alert("Error toggling delivery"); }
   };
@@ -203,7 +203,7 @@ const grandNetProfit = orders.reduce((acc, order) => acc + parseFloat(order.tota
       try {
                 // await axios.delete(`http://localhost:5000/api/orders/${id}`);
 
-        await axios.delete(`/api/orders/${id}`);
+        await api.delete(`/api/orders/${id}`);
         alert("Order Deleted");
         fetchOrders(); // Refresh the list
       } catch (err) {
@@ -222,7 +222,7 @@ const grandNetProfit = orders.reduce((acc, order) => acc + parseFloat(order.tota
     try {
               // await axios.patch(`http://localhost:5000/api/orders/${selectedOrder._id}/payment`, { isReceived: true, ...payData });
 
-        await axios.patch(`/api/orders/${selectedOrder._id}/payment`, { isReceived: true, ...payData });
+        await api.patch(`/api/orders/${selectedOrder._id}/payment`, { isReceived: true, ...payData });
         setShowPayModal(false);
         fetchOrders();
     } catch(err) { alert("Error updating payment"); }
@@ -562,7 +562,7 @@ const handleImport = (e) => {
 
       // Send to Backend
       // await axios.post('http://localhost:5000/api/orders/bulk', ordersToUpload);
-            await axios.post('/api/orders/bulk', ordersToUpload);
+            await api.post('/api/orders/bulk', ordersToUpload);
       alert(`🎉 Success! ${ordersToUpload.length} orders imported with calculated profits.`);
       fetchOrders(); // Refresh the list
       
