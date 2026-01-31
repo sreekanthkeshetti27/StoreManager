@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Card, Form, Button, Row, Col, Table } from 'react-bootstrap';
 import { Plus, Trash2, Save, PackagePlus } from 'lucide-react';
-// import axios from 'axios';
+import axios from 'axios';
 import api from '../api';
 
 const Dashboard = () => {
